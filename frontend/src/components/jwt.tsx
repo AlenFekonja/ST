@@ -36,10 +36,10 @@ export function parseJWT(token: string): { header: JWTHeader, payload: JWTPayloa
     return { header, payload }; 
 }
 
-export function getAndParseJWT(): { header: JWTHeader, payload: JWTPayload } | null {
-    const token = getCookie('token');
-    if (token) {
-        return parseJWT(token);
-    }
-    return null;
+export function getAndParseJWT(): { header: JWTHeader; payload: JWTPayload } | null {
+  const token = getCookie("token");
+  if (token) {
+    return parseJWT(token);
+  }
+  return null;
 }

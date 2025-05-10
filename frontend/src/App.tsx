@@ -13,7 +13,7 @@ import Register from './components/register.tsx';
 import TaskForm from './components/taskForm.tsx';
 import PreferenceForm from './components/preferenceForm.tsx';
 import RewardForm from './components/rewardForm.tsx';
-import { getAndParseJWT } from './components/jwt.tsx';
+import Profile from "./components/profile.tsx";
 
 export function showNotification(title, body) {
   if (Notification.permission === "granted") {
@@ -45,6 +45,7 @@ function App() {
         <Route path="/tasks/edit/:id" element={<TaskForm />} />
         <Route path="/myRewards" element={<UserRewardList />} />
         <Route path="/shortcuts" element={<Shortcuts />} />
+        <Route path="/profile" element={<Profile />} />
         </Route>
       </Routes>
     </Router>
