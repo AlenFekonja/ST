@@ -8,18 +8,22 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
-import { MoreVertical } from "lucide-react";
+import { MoreVertical, User } from "lucide-react";
 import VoiceCommand from "./voiceCommand.tsx";
 import { useNavigate } from "react-router-dom";
 import { getAndParseJWT } from "./jwt.tsx";
+
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -28,6 +32,8 @@ const Navbar = () => {
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
     navigate("/");
   };
+
+  const user = getAndParseJWT()?.payload;
 
   return (
     <AppBar position="static" sx={{ backgroundColor: "#333" }}>
@@ -93,6 +99,16 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
+            <Tooltip title="Profile">
+              <IconButton
+                onClick={() => navigate("/profile")}
+                sx={{ color: "inherit", padding: 0 }}
+              >
+                <User />
+              </IconButton>
+            </Tooltip>
+          </li>
+          <li>
             <IconButton
               onClick={handleClick}
               sx={{ color: "inherit", padding: 0 }}
@@ -118,16 +134,21 @@ const Navbar = () => {
               <MenuItem onClick={() => navigate("/shortcuts")}>
                 Shortcuts
               </MenuItem>
+              {user?.email && (
+                <MenuItem disabled>
+                  Logged in as: {user.email}
+                </MenuItem>
+              )}
               <MenuItem onClick={useLogout}>Logout</MenuItem>
-              {getAndParseJWT()?.payload?.admin && (
-                <div>
+              {user?.admin && (
+                <>
                   <MenuItem onClick={() => navigate("/users")}>
                     Users - admin view
                   </MenuItem>
                   <MenuItem onClick={() => navigate("/rewards")}>
                     Rewards - admin view
                   </MenuItem>
-                </div>
+                </>
               )}
             </Menu>
           </li>

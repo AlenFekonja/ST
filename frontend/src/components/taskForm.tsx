@@ -13,8 +13,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAndParseJWT } from "./jwt.tsx";
 import { showNotification } from "../App.tsx";
+import { getAndParseJWT } from "./jwt.tsx";
 
 export interface Task {
   _id: string;
@@ -27,6 +27,7 @@ export interface Task {
   category: string;
   reminder: string;
   notes: string;
+  status?: 'started' | 'completed';
 }
 
 const TaskForm = () => {
@@ -41,20 +42,22 @@ const TaskForm = () => {
     category: "",
     reminder: "",
     notes: "",
+    status: "started", // 👈 default to 'started'
   });
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!id) return;
 
     const formatDateTimeLocal = (isoString: string) => {
-        if (!isoString) return '';
-        const date = new Date(isoString);
-        const offset = date.getTimezoneOffset();
-        const localDate = new Date(date.getTime() - offset * 60000);
-        return localDate.toISOString().slice(0, 16);
-      };
+      if (!isoString) return '';
+      const date = new Date(isoString);
+      const offset = date.getTimezoneOffset();
+      const localDate = new Date(date.getTime() - offset * 60000);
+      return localDate.toISOString().slice(0, 16);
+    };
 
     const fetchTask = async () => {
       try {
@@ -75,6 +78,7 @@ const TaskForm = () => {
           category: task.category || "",
           reminder: formatDateTimeLocal(task.reminder || ''),
           notes: task.notes || "",
+          status: task.status || "started",
         });
 
         setEditingTask(task);
@@ -89,18 +93,18 @@ const TaskForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    newTask.user_id=getAndParseJWT()?.payload.id;
+    newTask.user_id = getAndParseJWT()?.payload.id;
     try {
       if (editingTask) {
         await axios.put(
           `http://localhost:5000/tasks/${editingTask._id}`,
           newTask
         );
-        showNotification("Tasks","Task was edited");
+        showNotification("Tasks", "Task was edited");
         navigate('/tasks');
       } else {
         await axios.post("http://localhost:5000/tasks", newTask);
-        showNotification("Tasks","Task was added");
+        showNotification("Tasks", "Task was added");
       }
 
       setNewTask({
@@ -113,8 +117,9 @@ const TaskForm = () => {
         category: "",
         reminder: "",
         notes: "",
+        status: "started",
       });
-      
+
       setEditingTask(null);
     } catch (error) {
       console.error("Error submitting task:", error);
@@ -212,6 +217,22 @@ const TaskForm = () => {
                         </MenuItem>
                       )
                     )}
+                  </Select>
+                </FormControl>
+              </Box>
+
+              <Box mb={2}>
+                <FormControl fullWidth required>
+                  <InputLabel>Status</InputLabel>
+                  <Select
+                    value={newTask.status}
+                    onChange={(e) =>
+                      setNewTask({ ...newTask, status: e.target.value })
+                    }
+                    label="Status"
+                  >
+                    <MenuItem value="started">Started</MenuItem>
+                    <MenuItem value="completed">Completed</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

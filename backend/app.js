@@ -1,34 +1,37 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./db');
-var usersRouter = require('./routes/userRoutes');
-var preferenceRoutes = require('./routes/preferenceRoutes');
-var rewardRoutes = require('./routes/rewardRoutes');
-var taskRoutes = require('./routes/taskRoutes');
-var userRewardRoutes = require('./routes/userRewardRoutes');
-var notifsRoutes = require('./routes/notifsRoutes');
 
 dotenv.config();
 connectDB();
-var app = express();
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+const app = express();
+
 app.use(cors({
-  origin: true,             
-  credentials: true        
+  origin: 'http://localhost:3000',
+  credentials: true
 }));
+
 app.use(logger('dev'));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
+const usersRouter = require('./routes/userRoutes');
+const preferenceRoutes = require('./routes/preferenceRoutes');
+const rewardRoutes = require('./routes/rewardRoutes');
+const taskRoutes = require('./routes/taskRoutes');
+const userRewardRoutes = require('./routes/userRewardRoutes');
+const notifsRoutes = require('./routes/notifsRoutes');
+const expRoutes = require('./routes/expRoutes');
 
 app.use('/users', usersRouter);
 app.use('/tasks', taskRoutes);
@@ -36,6 +39,7 @@ app.use('/rewards', rewardRoutes);
 app.use('/userRewards', userRewardRoutes);
 app.use('/preferences', preferenceRoutes);
 app.use('/notifs', notifsRoutes);
+app.use('/exp', expRoutes);
 
 app.use(function(req, res, next) {
   next(createError(404));
@@ -44,7 +48,6 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   res.status(err.status || 500);
   res.render('error');
 });
