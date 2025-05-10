@@ -26,11 +26,7 @@ const PreferencesList = () => {
             showNotification("Preferences Error","Couldn't fetch preferences: "+ error);
         }
     };
-
-
-
-
-
+    
     const handleDelete = async (id) => {
         try {
             await axios.delete(`http://localhost:5000/preferences/${id}`);

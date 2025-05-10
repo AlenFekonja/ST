@@ -1,4 +1,3 @@
-// controllers/taskController.js
 const mongoose = require('mongoose');
 const Task    = require('../models/taskModel');
 const User    = require('../models/userModel');
@@ -130,10 +129,8 @@ exports.deleteTask = async (req, res) => {
   }
 };
 
-
 exports.completeTask = async (req, res) => {
   try {
-    // 1) fetch the task
     const task = await Task.findById(req.params.id);
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
@@ -142,12 +139,10 @@ exports.completeTask = async (req, res) => {
       return res.status(400).json({ error: 'Task already completed' });
     }
 
-    // 2) mark it done
     task.completed = true;
     task.status    = 'completed';
     await task.save();
 
-    // 3) compute EXP by category
     const CATEGORY_EXP = {
       school:   25,
       work:     20,
@@ -158,7 +153,6 @@ exports.completeTask = async (req, res) => {
     const expAward     = CATEGORY_EXP[task.category] || 10;
     const LEVEL_THRESH = 100;
 
-    // 4) load & update user points + levels
     const userBefore = await User.findById(task.user_id);
     let { points, level } = userBefore;
     points += expAward;
@@ -176,7 +170,6 @@ exports.completeTask = async (req, res) => {
       { new: true }
     );
 
-    // 5) log the EXP award
     await ExpLog.create({
       user_id:  task.user_id,
       amount:   expAward,
@@ -184,7 +177,6 @@ exports.completeTask = async (req, res) => {
       reason:   `Completed ${task.category}: ${task.title}`,
     });
 
-    // 6) respond with EXP + new user stats
     res.json({
       message: 'Task completed, EXP awarded',
       exp:     expAward,

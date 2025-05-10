@@ -25,8 +25,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const jwtData = getAndParseJWT()?.payload;
   const userId = jwtData?.id;
-
-  // State and effects must be at top level
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -45,13 +43,11 @@ const Profile = () => {
       .finally(() => setLoading(false));
   }, [userId]);
 
-  // Redirect if not logged in
   if (!jwtData) {
     navigate("/");
     return null;
   }
 
-  // Loading state
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -60,7 +56,6 @@ const Profile = () => {
     );
   }
 
-  // No profile found
   if (!profile) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
