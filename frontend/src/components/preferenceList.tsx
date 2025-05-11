@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, TextField, Card, CardContent, Typography, Box } from '@mui/material';
+import { Button, Card, CardContent, Typography, Box } from '@mui/material';
 import { getAndParseJWT } from './jwt.tsx';
 import { useNavigate } from 'react-router-dom';
 import { showNotification } from '../App.tsx';
@@ -26,10 +26,6 @@ const PreferencesList = () => {
             showNotification("Preferences Error","Couldn't fetch preferences: "+ error);
         }
     };
-
-
-
-
 
     const handleDelete = async (id) => {
         try {

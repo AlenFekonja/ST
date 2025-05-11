@@ -9,8 +9,11 @@ import {
   Divider,
   Stack,
   LinearProgress,
+  Grid,
+  Chip,
 } from "@mui/material";
 import axios from "axios";
+import { Trophy } from "lucide-react";
 import { getAndParseJWT } from "./jwt.tsx";
 
 interface UserProfile {
@@ -21,46 +24,69 @@ interface UserProfile {
   level: number;
 }
 
+interface Reward {
+  _id: string;
+  name: string;
+  description?: string;
+  level_required: number;
+  condition_required?: string;
+}
+
+interface UserReward {
+  _id: string;
+  reward_id: Reward;
+  earned_at: string;
+}
+
 const Profile = () => {
   const navigate = useNavigate();
   const jwtData = getAndParseJWT()?.payload;
   const userId = jwtData?.id;
-
-  // State and effects must be at top level
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [achievements, setAchievements] = useState<UserReward[]>([]);
+  const [loadingAchv, setLoadingAchv] = useState(true);
 
   useEffect(() => {
     if (!userId) {
-      setLoading(false);
+      setLoadingProfile(false);
       return;
     }
-
     axios
       .get<UserProfile>(`http://localhost:5000/users/${userId}`, {
         withCredentials: true,
       })
-      .then((res) => setProfile(res.data))
-      .catch((err) => console.error("Error fetching profile:", err))
-      .finally(() => setLoading(false));
+      .then(res => setProfile(res.data))
+      .catch(() => setProfile(null))
+      .finally(() => setLoadingProfile(false));
   }, [userId]);
 
-  // Redirect if not logged in
+  useEffect(() => {
+    if (!userId) {
+      setLoadingAchv(false);
+      return;
+    }
+    axios
+      .get<UserReward[]>(`http://localhost:5000/userRewards/${userId}`, {
+        withCredentials: true,
+      })
+      .then(res => setAchievements(res.data))
+      .catch(() => setAchievements([]))
+      .finally(() => setLoadingAchv(false));
+  }, [userId]);
+
   if (!jwtData) {
     navigate("/");
     return null;
   }
 
-  // Loading state
-  if (loading) {
+  if (loadingProfile) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
         <Typography>Loading profile...</Typography>
       </Box>
     );
   }
-
-  // No profile found
   if (!profile) {
     return (
       <Box display="flex" justifyContent="center" mt={4}>
@@ -68,9 +94,6 @@ const Profile = () => {
       </Box>
     );
   }
-
-  const getInitials = (email: string) =>
-    email.charAt(0)?.toUpperCase() || "U";
 
   const LEVEL_THRESHOLD = 100;
   const currentExp = profile.points % LEVEL_THRESHOLD;
@@ -80,20 +103,18 @@ const Profile = () => {
     <Box
       display="flex"
       flexDirection="column"
-      justifyContent="center"
       alignItems="center"
-      minHeight="90vh"
-      sx={{ backgroundColor: "#eef2f5", padding: 4 }}
+      sx={{ backgroundColor: "#eef2f5", p: 4 }}
     >
       <Card
         sx={{
           maxWidth: 450,
           width: "100%",
-          paddingY: 4,
-          paddingX: 3,
+          py: 4,
+          px: 3,
           boxShadow: 5,
           borderRadius: 4,
-          backgroundColor: "#ffffff",
+          backgroundColor: "#fff",
         }}
       >
         <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
@@ -103,10 +124,10 @@ const Profile = () => {
               width: 80,
               height: 80,
               fontSize: 32,
-              marginBottom: 1,
+              mb: 1,
             }}
           >
-            {getInitials(profile.email)}
+            {profile.email.charAt(0).toUpperCase()}
           </Avatar>
           <Typography variant="h5" fontWeight="bold">
             {profile.email}
@@ -116,7 +137,7 @@ const Profile = () => {
           </Typography>
         </Box>
 
-        <Divider sx={{ marginY: 2 }} />
+        <Divider sx={{ my: 2 }} />
 
         <Stack spacing={1} mb={3}>
           <ProfileItem label="User ID" value={profile._id} />
@@ -145,9 +166,57 @@ const Profile = () => {
         </Stack>
       </Card>
 
+      <Box sx={{ width: "100%", maxWidth: 900, mt: 6 }}>
+        <Typography variant="h4" gutterBottom>
+          My Achievements
+        </Typography>
+
+        {loadingAchv ? (
+          <Typography>Loading achievements...</Typography>
+        ) : achievements.length === 0 ? (
+          <Typography color="text.secondary">
+            You haven't earned any achievements yet.
+          </Typography>
+        ) : (
+          <Grid container spacing={3}>
+            {achievements.map(ur => {
+              const r = ur.reward_id;
+              return (
+                <Grid item xs={12} sm={6} md={4} key={ur._id}>
+                  <Card
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      p: 2,
+                      borderRadius: 2,
+                      boxShadow: 2,
+                    }}
+                  >
+                    <Trophy size={32} color="#f5a623" />
+                    <Box ml={2}>
+                      <Typography variant="h6">{r.name}</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Earned on {new Date(ur.earned_at).toLocaleDateString()}
+                      </Typography>
+                      {r.description && (
+                        <Typography variant="body2">{r.description}</Typography>
+                      )}
+                      <Chip
+                        label={`Level ${r.level_required}`}
+                        size="small"
+                        sx={{ mt: 1 }}
+                      />
+                    </Box>
+                  </Card>
+                </Grid>
+              );
+            })}
+          </Grid>
+        )}
+      </Box>
       <Button
         variant="text"
-        sx={{ marginTop: 2, color: "#555", textTransform: "none" }}
+        sx={{ mt: 4, color: "#555", textTransform: "none" }}
         onClick={() => navigate(-1)}
       >
         ← Go Back

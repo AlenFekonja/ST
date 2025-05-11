@@ -52,7 +52,6 @@ const TaskList = () => {
   const handleComplete = async (taskId: string) => {
     setLoadingComplete(taskId);
     try {
-      // Use PUT to match router.put('/:id/complete')
       const completeRes = await axios.put(
         `http://localhost:5000/tasks/${taskId}/complete`,
         {},
@@ -92,8 +91,6 @@ const TaskList = () => {
         <Button variant="outlined" sx={{ marginTop: '10px' }} onClick={() => navigate('/tasks/add')}>
           Add task
         </Button>
-
-        {/* Filter Buttons */}
         <Box display="flex" gap={2} my={3}>
           <Button variant={filter === 'all' ? 'contained' : 'outlined'} onClick={() => setFilter('all')}>
             All
@@ -106,7 +103,6 @@ const TaskList = () => {
           </Button>
         </Box>
 
-        {/* Task Cards */}
         <div style={{ marginTop: '24px' }}>
           {filteredTasks.map((task) => (
             <Card key={task._id} style={{ marginBottom: '16px' }}>

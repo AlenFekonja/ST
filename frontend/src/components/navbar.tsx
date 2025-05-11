@@ -16,14 +16,13 @@ import { useNavigate } from "react-router-dom";
 import { getAndParseJWT } from "./jwt.tsx";
 
 const Navbar = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
 
-  const handleClick = (event) => {
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -52,40 +51,25 @@ const Navbar = () => {
             alt="logo"
             sx={{ height: "60px", width: "auto", marginRight: 2 }}
           />
-          <Link
-            href="/tasks"
-            underline="none"
-            color="inherit"
-            sx={{ fontSize: "1.8em", fontWeight: "bold" }}
-          >
+          <Link href="/tasks" underline="none" color="inherit" sx={{ fontSize: "1.8em", fontWeight: "bold" }}>
             HobbyHub
           </Link>
         </Box>
 
-        <Stack
-          direction="row"
-          spacing={4}
-          component="ul"
-          sx={{ listStyle: "none", margin: 0, padding: 0 }}
-        >
+        <Stack direction="row" spacing={4} component="ul" sx={{ listStyle: "none", m: 0, p: 0 }}>
           <li>
-            <Link
-              href="/tasks"
-              underline="none"
-              color="inherit"
-              sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}
-            >
+            <Link href="/tasks" underline="none" color="inherit" sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}>
               Tasks
             </Link>
           </li>
           <li>
             <Link
-              href="/myRewards"
+              href="/rewardsList"
               underline="none"
               color="inherit"
               sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}
             >
-              My Rewards
+              Rewards
             </Link>
           </li>
           <li>
@@ -100,53 +84,39 @@ const Navbar = () => {
           </li>
           <li>
             <Tooltip title="Profile">
-              <IconButton
-                onClick={() => navigate("/profile")}
-                sx={{ color: "inherit", padding: 0 }}
-              >
+              <IconButton onClick={() => navigate("/profile")} sx={{ color: "inherit", p: 0 }}>
                 <User />
               </IconButton>
             </Tooltip>
           </li>
           <li>
-            <IconButton
-              onClick={handleClick}
-              sx={{ color: "inherit", padding: 0 }}
-            >
+            <IconButton onClick={handleClick} sx={{ color: "inherit", p: 0 }}>
               <MoreVertical />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
               <MenuItem onClick={handleClose}>
                 <VoiceCommand />
               </MenuItem>
-              <MenuItem onClick={() => navigate("/shortcuts")}>
+              <MenuItem onClick={() => { handleClose(); navigate("/shortcuts"); }}>
                 Shortcuts
               </MenuItem>
               {user?.email && (
-                <MenuItem disabled>
-                  Logged in as: {user.email}
-                </MenuItem>
+                <MenuItem disabled>Logged in as: {user.email}</MenuItem>
               )}
               <MenuItem onClick={useLogout}>Logout</MenuItem>
               {user?.admin && (
                 <>
-                  <MenuItem onClick={() => navigate("/users")}>
-                    Users - admin view
+                  <MenuItem onClick={() => { handleClose(); navigate("/users"); }}>
+                    Users (admin)
                   </MenuItem>
-                  <MenuItem onClick={() => navigate("/rewards")}>
-                    Rewards - admin view
+                  <MenuItem onClick={() => { handleClose(); navigate("/rewards"); }}>
+                    Rewards (admin)
                   </MenuItem>
                 </>
               )}

@@ -42,7 +42,7 @@ const TaskForm = () => {
     category: "",
     reminder: "",
     notes: "",
-    status: "started", // 👈 default to 'started'
+    status: "started", 
   });
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
