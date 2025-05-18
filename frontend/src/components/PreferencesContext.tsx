@@ -1,4 +1,10 @@
-import React, { createContext, useState, useEffect, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  ReactNode,
+  useContext,
+} from "react";
 import axios from "axios";
 import { getAndParseJWT } from "./jwt.tsx";
 
@@ -41,7 +47,12 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchActivePreference = async () => {
     const userId = getAndParseJWT()?.payload.id;
-    if (!userId) return;
+    if (!userId) {
+      setPreference(null);
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.get(
         `http://localhost:5000/preferences/${userId}`
