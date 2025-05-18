@@ -1,20 +1,22 @@
-import React, { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import Navbar from './components/navbar.tsx';
-import { Box, Typography } from '@mui/material';
-import { getAndParseJWT } from './components/jwt.tsx';
+import React, { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
+import Navbar from "./components/navbar.tsx";
+import { Box, Typography } from "@mui/material";
+import { getAndParseJWT } from "./components/jwt.tsx";
 
 const Footer = () => (
   <Box
     component="footer"
     sx={{
-      textAlign: 'center',
+      textAlign: "center",
       padding: 2,
-      backgroundColor: '#333',
-      position: 'relative',
+      backgroundColor: "#333",
+      position: "relative",
     }}
   >
-    <Typography variant="body2" sx={{ color: 'white' }}>© 2025 HobbyHub. All rights reserved.</Typography>
+    <Typography variant="body2" sx={{ color: "white" }}>
+      © 2025 HobbyHub. All rights reserved.
+    </Typography>
   </Box>
 );
 
@@ -24,29 +26,40 @@ const Layout = () => {
   useEffect(() => {
     const jwt = getAndParseJWT();
     if (!jwt) {
-      navigate('/');
+      navigate("/");
     }
   }, [navigate]);
-  
+
   return (
     <Box
       sx={{
-        backgroundColor: '#f0f0f0',
-        display: 'flex',
-        flexDirection: 'column',
-        minHeight: '100vh',
-        padding: 0, 
+        backgroundColor: "#f0f0f0",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        padding: 0,
       }}
     >
       <Navbar />
       <Box
         sx={{
           flexGrow: 1,
+          minHeight: "80vh",
+          display: "flex",
+          justifyContent: "center", // centriraj vsebino horizontalno
           padding: { xs: 1, sm: 2 },
-          minHeight: '80vh', 
         }}
       >
-        <Outlet />
+        <Box
+          sx={{
+            width: "100%",
+            maxWidth: 1000, // omeji max širino vsebine
+            padding: 2,
+            borderRadius: 1,
+          }}
+        >
+          <Outlet />
+        </Box>
       </Box>
       <Footer />
     </Box>

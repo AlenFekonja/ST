@@ -39,6 +39,7 @@ const Navbar = () => {
       <Toolbar
         sx={{
           maxWidth: 1200,
+          height: "80px",
           width: "100%",
           marginX: "auto",
           justifyContent: "space-between",
@@ -51,14 +52,29 @@ const Navbar = () => {
             alt="logo"
             sx={{ height: "60px", width: "auto", marginRight: 2 }}
           />
-          <Link href="/tasks" underline="none" color="inherit" sx={{ fontSize: "1.8em", fontWeight: "bold" }}>
+          <Link
+            href="/tasks"
+            underline="none"
+            color="inherit"
+            sx={{ fontSize: "1.8em", fontWeight: "bold" }}
+          >
             HobbyHub
           </Link>
         </Box>
 
-        <Stack direction="row" spacing={4} component="ul" sx={{ listStyle: "none", m: 0, p: 0 }}>
+        <Stack
+          direction="row"
+          spacing={4}
+          component="ul"
+          sx={{ listStyle: "none", m: 0, p: 0 }}
+        >
           <li>
-            <Link href="/tasks" underline="none" color="inherit" sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}>
+            <Link
+              href="/tasks"
+              underline="none"
+              color="inherit"
+              sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}
+            >
               Tasks
             </Link>
           </li>
@@ -84,7 +100,10 @@ const Navbar = () => {
           </li>
           <li>
             <Tooltip title="Profile">
-              <IconButton onClick={() => navigate("/profile")} sx={{ color: "inherit", p: 0 }}>
+              <IconButton
+                onClick={() => navigate("/profile")}
+                sx={{ color: "inherit", p: 0 }}
+              >
                 <User />
               </IconButton>
             </Tooltip>
@@ -103,7 +122,12 @@ const Navbar = () => {
               <MenuItem onClick={handleClose}>
                 <VoiceCommand />
               </MenuItem>
-              <MenuItem onClick={() => { handleClose(); navigate("/shortcuts"); }}>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  navigate("/shortcuts");
+                }}
+              >
                 Shortcuts
               </MenuItem>
               {user?.email && (
@@ -112,10 +136,20 @@ const Navbar = () => {
               <MenuItem onClick={useLogout}>Logout</MenuItem>
               {user?.admin && (
                 <>
-                  <MenuItem onClick={() => { handleClose(); navigate("/users"); }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate("/users");
+                    }}
+                  >
                     Users (admin)
                   </MenuItem>
-                  <MenuItem onClick={() => { handleClose(); navigate("/rewards"); }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate("/rewards");
+                    }}
+                  >
                     Rewards (admin)
                   </MenuItem>
                 </>
