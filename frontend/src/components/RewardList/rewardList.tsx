@@ -5,7 +5,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
   Button,
   Dialog,
   DialogTitle,
@@ -167,6 +166,7 @@ const RewardList: React.FC = () => {
             {rewards.map((reward) => (
               <Card
                 key={reward._id}
+                className="reward"
                 sx={{
                   transition: "all 0.2s ease",
                   borderRadius: "8px",

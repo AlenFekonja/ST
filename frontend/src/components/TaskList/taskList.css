@@ -10,7 +10,6 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.15);
-  width: 96%;
   position: relative;
   user-select: none;
   border: 1px solid rgb(205, 205, 205);
@@ -28,12 +27,16 @@
 }
 
 .task-category {
-  background-color: #f5f5dc;
+  background-color: rgb(240, 226, 144);
   padding: 1px 8px;
   border-radius: 12px;
   font-weight: 500;
   user-select: text;
   font-size: 0.9rem;
+}
+
+.theme-dark .task-category { 
+  color:black
 }
 
 .task-description {

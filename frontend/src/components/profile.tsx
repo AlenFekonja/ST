@@ -56,7 +56,7 @@ const Profile = () => {
       .get<UserProfile>(`http://localhost:5000/users/${userId}`, {
         withCredentials: true,
       })
-      .then(res => setProfile(res.data))
+      .then((res) => setProfile(res.data))
       .catch(() => setProfile(null))
       .finally(() => setLoadingProfile(false));
   }, [userId]);
@@ -70,7 +70,7 @@ const Profile = () => {
       .get<UserReward[]>(`http://localhost:5000/userRewards/${userId}`, {
         withCredentials: true,
       })
-      .then(res => setAchievements(res.data))
+      .then((res) => setAchievements(res.data))
       .catch(() => setAchievements([]))
       .finally(() => setLoadingAchv(false));
   }, [userId]);
@@ -104,9 +104,10 @@ const Profile = () => {
       display="flex"
       flexDirection="column"
       alignItems="center"
-      sx={{ backgroundColor: "#eef2f5", p: 4 }}
+      sx={{ p: 4 }}
     >
       <Card
+        className="profile"
         sx={{
           maxWidth: 450,
           width: "100%",
@@ -179,7 +180,7 @@ const Profile = () => {
           </Typography>
         ) : (
           <Grid container spacing={3}>
-            {achievements.map(ur => {
+            {achievements.map((ur) => {
               const r = ur.reward_id;
               return (
                 <Grid item xs={12} sm={6} md={4} key={ur._id}>

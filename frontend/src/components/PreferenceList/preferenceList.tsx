@@ -104,6 +104,7 @@ const PreferencesList = () => {
           {preferences.map((preference) => (
             <Card
               key={preference._id}
+              className="preference"
               sx={{
                 transition: "all 0.2s ease",
                 borderRadius: "8px",

@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Calendar,
-  dateFnsLocalizer,
-  Event as RBCEvent,
-} from "react-big-calendar";
+import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import axios from "axios";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -24,7 +20,11 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-interface CalendarEvent extends RBCEvent {
+interface CalendarEvent {
+  title: string;
+  start: Date;
+  end: Date;
+  allDay?: boolean;
   resource: Task;
 }
 

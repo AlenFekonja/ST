@@ -1,12 +1,8 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  useContext,
-} from "react";
+import React, { createContext, useState, useEffect, ReactNode, useContext } from "react";
 import axios from "axios";
 import { getAndParseJWT } from "./jwt.tsx";
+
+import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
 export const THEME_OPTIONS = ["light", "dark", "system"] as const;
 export const FONT_OPTIONS = ["sans-serif", "serif", "monospace"] as const;
@@ -79,7 +75,7 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!preference) return;
 
-    // Theme
+    // Body class for theme
     document.body.classList.remove("theme-light", "theme-dark");
     if (preference.theme === "light") {
       document.body.classList.add("theme-light");
@@ -87,10 +83,10 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       document.body.classList.add("theme-dark");
     }
 
-    // Font (with fallback)
+    // Body font-family fallback
     document.body.style.fontFamily = preference.font || "sans-serif";
 
-    // Layout
+    // Layout classes
     document.body.classList.remove(
       "layout-grid",
       "layout-list",
@@ -99,6 +95,23 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     if (preference.layout) {
       document.body.classList.add(`layout-${preference.layout}`);
     }
+  }, [preference]);
+
+  // ---- MUI Theme creation ----
+  const muiTheme = React.useMemo(() => {
+    if (!preference) return createTheme();
+
+    return createTheme({
+      palette: {
+        mode: preference.theme === "dark" ? "dark" : "light",
+      },
+      typography: {
+        fontFamily: preference.font,
+      },
+      components: {
+        // Tu lahko po potrebi prilagodiš MUI komponente (npr. Button, Typography)
+      },
+    });
   }, [preference]);
 
   if (loading) return null; // ali Spinner komponenta
@@ -111,7 +124,10 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
         updatePreference,
       }}
     >
-      {children}
+      <ThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </PreferencesContext.Provider>
   );
 };

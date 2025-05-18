@@ -33,7 +33,6 @@ const Layout = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#f0f0f0",
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",

@@ -163,7 +163,10 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
       <div className="task-container">
         {filteredTasks.map((task) => (
-          <div key={task._id} className="task-card">
+          <div
+            key={task._id}
+            className="task-card"
+          >
             <Box
               display="flex"
               justifyContent="space-between"

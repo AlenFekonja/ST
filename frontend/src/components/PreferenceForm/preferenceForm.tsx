@@ -72,6 +72,16 @@ const PreferenceForm = () => {
     }
   }, [id]);
 
+  const deactivateOtherPreferences = async (userId: string) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/preferences/deactivate-others/${userId}`
+      );
+    } catch (error) {
+      console.error("Failed to deactivate other preferences:", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const userId = getAndParseJWT()?.payload.id;
@@ -83,6 +93,8 @@ const PreferenceForm = () => {
     const updatedPreference = { ...preference, user_id: userId };
 
     try {
+      await deactivateOtherPreferences(userId);
+
       if (editing && id) {
         await axios.put(
           `http://localhost:5000/preferences/${id}`,
@@ -144,6 +156,7 @@ const PreferenceForm = () => {
         </Box>
 
         <Card
+          className="preferenceForm"
           sx={{
             transition: "all 0.2s ease",
             borderRadius: "8px",
@@ -152,7 +165,7 @@ const PreferenceForm = () => {
             marginBottom: "30px",
           }}
         >
-          <CardContent sx={{ fontFamily: "inherit" }}>
+          <CardContent sx={{ fontFamily: "inherit", mt: 2 }}>
             <form onSubmit={handleSubmit}>
               <FormControl fullWidth>
                 <InputLabel>Theme</InputLabel>
