@@ -77,22 +77,24 @@
   font-size: 0.85rem;
 }
 
+.rbc-month-view .rbc-day-bg {
+  position: relative;
+  min-height: 80px;
+  border: 1px solid #e0e0e0;
+}
 .rbc-show-more:hover {
   text-decoration: underline;
 }
 
-/* Svetla tema (privzeto) */
 .rbc-off-range-bg {
   background-color: #f5f5f5;
   color: #999999;
 }
 
-/* Dark tema - recimo, da si dodaš na body class 'dark-theme' */
 .theme-dark .rbc-off-range-bg {
   background-color: #333333;
   color: #525252;
 }
-/* Današnji dan ozadje */
 .rbc-day-bg.rbc-today {
   border: 1px solid #ffde22;
   background-color: #b7dfff;
@@ -103,7 +105,7 @@
 }
 
 .rbc-month-view .rbc-day-slot {
-  max-height: 100px; /* ali kakšna višina ti ustreza */
+  max-height: 100px;
   overflow-y: auto;
 }
 

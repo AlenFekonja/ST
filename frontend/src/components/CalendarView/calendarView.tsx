@@ -7,6 +7,7 @@ import { enUS } from "date-fns/locale";
 import { Task } from "../TaskList/taskList";
 import { Typography, Box, Dialog, Button } from "@mui/material";
 import "./calendarView.css";
+import { useNavigate } from "react-router-dom";
 
 const locales = {
   "en-US": enUS,
@@ -29,6 +30,7 @@ interface CalendarEvent {
 }
 
 const CalendarView = () => {
+  const navigate = useNavigate();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState<
@@ -111,6 +113,44 @@ const CalendarView = () => {
       },
     };
   };
+  const CustomDateCellWrapper = ({ value, children }: any) => {
+    const handleClick = (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const newDate = new Date(value);
+      newDate.setDate(newDate.getDate() + 1); // dodaj en dan
+      const isoDate = newDate.toISOString().split("T")[0]; // npr. "2025-05-13"
+      navigate(`/tasks/add?date=${isoDate}`);
+    };
+
+    return (
+      <div
+        style={{
+          position: "relative", // naj bo vedno relativno za znotraj "absolute"
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <button
+          onClick={handleClick}
+          style={{
+            position: "absolute",
+            top: "1px",
+            right: "1px",
+            height: "20px",
+            fontSize: "14px",
+            lineHeight: "18px",
+            textAlign: "center",
+            zIndex: 1000,
+            border: "1px",
+            cursor: "pointer",
+          }}
+        >
+          +
+        </button>
+        <div style={{ height: "100%" }}>{children}</div>
+      </div>
+    );
+  };
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -131,6 +171,11 @@ const CalendarView = () => {
           onSelectEvent={(event: CalendarEvent) => {
             setSelectedEvent(event);
             setIsModalOpen(true);
+          }}
+          components={{
+            ...(currentView === "month" && {
+              dateCellWrapper: CustomDateCellWrapper,
+            }),
           }}
         />
       </div>

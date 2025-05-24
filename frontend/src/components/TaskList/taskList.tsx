@@ -163,10 +163,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
       <div className="task-container">
         {filteredTasks.map((task) => (
-          <div
-            key={task._id}
-            className="task-card"
-          >
+          <div key={task._id} className="task-card">
             <Box
               display="flex"
               justifyContent="space-between"
@@ -228,8 +225,8 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
             <Box
               display="flex"
-              gap={3}
-              flexWrap="wrap"
+              flexDirection="column"
+              gap={0.5}
               mt={3}
               mb={1}
               color="text.secondary"
@@ -254,7 +251,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
                   disabled={task.status === "completed"}
                   color="primary"
                 >
-                  <EditIcon fontSize="small" />
+                  <EditIcon fontSize="medium" />
                 </IconButton>
               </Tooltip>
               <Tooltip title="Delete">
@@ -262,16 +259,16 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
                   onClick={() => handleDelete(task._id)}
                   color="error"
                 >
-                  <DeleteIcon fontSize="small" />
+                  <DeleteIcon fontSize="medium" />
                 </IconButton>
               </Tooltip>
               {task.status !== "completed" && (
                 <Button
                   onClick={() => handleComplete(task._id)}
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   size="small"
-                  sx={{ fontFamily: "inherit" }}
+                  sx={{ fontWeight: "bold", fontFamily: "inherit" }}
                   disabled={loadingComplete === task._id}
                 >
                   {loadingComplete === task._id ? "Completing..." : "Complete"}

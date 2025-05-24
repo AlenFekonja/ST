@@ -15,6 +15,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import { showNotification } from "../App.tsx";
 import { getAndParseJWT } from "./jwt.tsx";
+import { useLocation } from "react-router-dom";
 
 export interface Task {
   _id: string;
@@ -27,10 +28,14 @@ export interface Task {
   category: string;
   reminder: string;
   notes: string;
-  status?: 'started' | 'completed';
+  status?: "started" | "completed";
 }
+const getQueryParams = (search: string) => {
+  return new URLSearchParams(search);
+};
 
 const TaskForm = () => {
+  const location = useLocation();
   const { id } = useParams();
   const [newTask, setNewTask] = useState({
     user_id: "",
@@ -42,8 +47,17 @@ const TaskForm = () => {
     category: "",
     reminder: "",
     notes: "",
-    status: "started", 
+    status: "started",
   });
+
+  useEffect(() => {
+    const params = getQueryParams(location.search);
+    const dateFromQuery = params.get("date");
+
+    if (dateFromQuery) {
+      setNewTask((prev) => ({ ...prev, event_date: dateFromQuery }));
+    }
+  }, [location.search]);
 
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const navigate = useNavigate();
@@ -52,7 +66,7 @@ const TaskForm = () => {
     if (!id) return;
 
     const formatDateTimeLocal = (isoString: string) => {
-      if (!isoString) return '';
+      if (!isoString) return "";
       const date = new Date(isoString);
       const offset = date.getTimezoneOffset();
       const localDate = new Date(date.getTime() - offset * 60000);
@@ -76,7 +90,7 @@ const TaskForm = () => {
           end_time: task.end_time?.slice(0, 5) || "",
           description: task.description || "",
           category: task.category || "",
-          reminder: formatDateTimeLocal(task.reminder || ''),
+          reminder: formatDateTimeLocal(task.reminder || ""),
           notes: task.notes || "",
           status: task.status || "started",
         });
@@ -101,7 +115,7 @@ const TaskForm = () => {
           newTask
         );
         showNotification("Tasks", "Task was edited");
-        navigate('/tasks');
+        navigate("/tasks");
       } else {
         await axios.post("http://localhost:5000/tasks", newTask);
         showNotification("Tasks", "Task was added");

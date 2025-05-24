@@ -12,7 +12,6 @@ import {
   DialogActions,
   TextField,
   Chip,
-  Stack,
   IconButton,
   FormControl,
   InputLabel,
@@ -21,6 +20,8 @@ import {
 } from "@mui/material";
 import { Trophy, Edit2, Trash2 } from "lucide-react";
 import { showNotification } from "../../App.tsx";
+import { usePreferences } from "../PreferencesContext.tsx";
+
 export interface Reward {
   _id: string;
   level_required: number;
@@ -127,6 +128,7 @@ const RewardList: React.FC = () => {
       showNotification("Rewards Error", "Delete failed");
     }
   };
+  const { preference } = usePreferences();
 
   return (
     <Box>
@@ -162,21 +164,32 @@ const RewardList: React.FC = () => {
 
           {rewards.length === 0 && <Typography>No rewards found.</Typography>}
 
-          <Stack spacing={2}>
+          <div
+            className="reward-container"
+            style={{
+              display: preference?.layout === "grid" ? "grid" : "flex",
+              flexDirection:
+                preference?.layout === "list" ? "column" : undefined,
+              gap: preference?.layout === "compact" ? "8px" : "16px",
+              gridTemplateColumns:
+                preference?.layout === "grid"
+                  ? "repeat(auto-fill, minmax(300px, 1fr))"
+                  : undefined,
+            }}
+          >
             {rewards.map((reward) => (
               <Card
                 key={reward._id}
-                className="reward"
                 sx={{
                   transition: "all 0.2s ease",
                   borderRadius: "8px",
                   boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
-                  position: "relative",
-                  userSelect: "none",
                   border: "1px solid rgb(205, 205, 205)",
+                  display: "flex",
+                  flexDirection: "column",
+                  height: "100%",
                   "&:hover": {
                     transform: "scale(1.02)",
-                    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.15)",
                     zIndex: 10,
                   },
                 }}
@@ -185,79 +198,136 @@ const RewardList: React.FC = () => {
                   sx={{
                     display: "flex",
                     flexDirection: "column",
-                    gap: 2,
+                    height: "100%",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "grid",
-                      gridTemplateColumns: "25% 20% 30% auto",
-                      alignItems: "center",
-                      gap: 2,
-                      width: "100%",
-                    }}
-                  >
-                    {/* 1. Stolpec - Ime nagrade z ikono */}
+                  {preference?.layout === "grid" ? (
+                    // Nova postavitev za GRID
                     <Box
                       sx={{
                         display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                        width: "100%",
+                      }}
+                    >
+                      {/* Zgornji del: naslov + gumbi desno */}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          width: "100%",
+                        }}
+                      >
+                        <Typography variant="h6" fontWeight="bold">
+                          {reward.name}
+                        </Typography>
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <IconButton
+                            onClick={() => handleOpen(reward)}
+                            color="primary"
+                          >
+                            <Edit2 size={20} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => handleDelete(reward._id)}
+                            color="error"
+                          >
+                            <Trash2 size={20} />
+                          </IconButton>
+                        </Box>
+                      </Box>
+
+                      {/* Srednji del: ikona levo, level in ostalo desno */}
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Trophy size={40} color="#f5a623" />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            maxWidth: "215px",
+                          }}
+                        >
+                          <Chip
+                            label={reward.condition_required}
+                            variant="outlined"
+                            color="primary"
+                            sx={{ width: "fit-content" }}
+                          />
+                          <Typography variant="body2">
+                            {reward.description ?? ""}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Box>
+                  ) : (
+                    // Privzeta postavitev za LIST
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "25% 20% 30% auto",
                         alignItems: "center",
-                        gap: 0.5,
+                        gap: 2,
+                        width: "100%",
                       }}
                     >
-                      <Trophy size={20} color="#f5a623" />
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        <Trophy size={40} color="#f5a623" />
+                        <Typography
+                          variant="body1"
+                          sx={{ fontFamily: "inherit" }}
+                        >
+                          {reward.name}
+                        </Typography>
+                      </Box>
+
+                      <Box sx={{ justifySelf: "center" }}>
+                        <Chip
+                          label={reward.condition_required}
+                          variant="outlined"
+                          color="primary"
+                        />
+                      </Box>
+
                       <Typography
-                        variant="body1"
-                        sx={{ fontFamily: "inherit" }}
+                        variant="body2"
+                        sx={{ justifySelf: "center", textAlign: "center" }}
                       >
-                        {reward.name}
+                        {reward.description ?? ""}
                       </Typography>
-                    </Box>
 
-                    {/* 2. Stolpec - Pogoj */}
-                    <Box sx={{ justifySelf: "center" }}>
-                      <Chip
-                        label={reward.condition_required}
-                        variant="outlined"
-                        color="primary"
-                      />
-                    </Box>
-
-                    {/* 3. Stolpec - Opis */}
-                    <Typography
-                      variant="body2"
-                      sx={{ justifySelf: "center", textAlign: "center" }}
-                    >
-                      {reward.description ?? ""}
-                    </Typography>
-
-                    {/* 4. Stolpec - Gumba, desno poravnana */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <IconButton
-                        onClick={() => handleOpen(reward)}
-                        color="primary"
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          gap: 1,
+                        }}
                       >
-                        <Edit2 size={20} />
-                      </IconButton>
-
-                      <IconButton
-                        onClick={() => handleDelete(reward._id)}
-                        color="error"
-                      >
-                        <Trash2 size={20} />
-                      </IconButton>
+                        <IconButton
+                          onClick={() => handleOpen(reward)}
+                          color="primary"
+                        >
+                          <Edit2 size={20} />
+                        </IconButton>
+                        <IconButton
+                          onClick={() => handleDelete(reward._id)}
+                          color="error"
+                        >
+                          <Trash2 size={20} />
+                        </IconButton>
+                      </Box>
                     </Box>
-                  </Box>
+                  )}
                 </CardContent>
               </Card>
             ))}
-          </Stack>
+          </div>
         </Box>
       </Box>
 
