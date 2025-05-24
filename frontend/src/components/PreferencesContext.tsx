@@ -10,7 +10,7 @@ import { getAndParseJWT } from "./jwt.tsx";
 
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 
-export const THEME_OPTIONS = ["light", "dark", "system"] as const;
+export const THEME_OPTIONS = ["light", "dark"] as const;
 export const FONT_OPTIONS = ["sans-serif", "serif", "monospace"] as const;
 export const LAYOUT_OPTIONS = ["grid", "list", "compact"] as const;
 
@@ -119,13 +119,10 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       typography: {
         fontFamily: preference.font,
       },
-      components: {
-        // Tu lahko po potrebi prilagodiš MUI komponente (npr. Button, Typography)
-      },
     });
   }, [preference]);
 
-  if (loading) return null; // ali Spinner komponenta
+  if (loading) return null;
 
   return (
     <PreferencesContext.Provider

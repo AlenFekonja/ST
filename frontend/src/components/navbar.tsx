@@ -35,7 +35,11 @@ const Navbar = () => {
   const user = getAndParseJWT()?.payload;
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#333" }}>
+    <AppBar
+      className="navbar"
+      position="static"
+      sx={{ backgroundColor: "#333" }}
+    >
       <Toolbar
         sx={{
           maxWidth: 1200,

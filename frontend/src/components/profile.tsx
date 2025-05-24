@@ -183,24 +183,48 @@ const Profile = () => {
             {achievements.map((ur) => {
               const r = ur.reward_id;
               return (
-                <Grid item xs={12} sm={6} md={4} key={ur._id}>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  key={ur._id}
+                  sx={{ height: "100%" }}
+                >
                   <Card
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      alignItems: "center", 
                       p: 2,
                       borderRadius: 2,
                       boxShadow: 2,
+                      height: "100%",
+                      minHeight: 180,
+                      mt: 2,
                     }}
                   >
-                    <Trophy size={32} color="#f5a623" />
-                    <Box ml={2}>
-                      <Typography variant="h6">{r.name}</Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        minWidth: 50,
+                      }}
+                    >
+                      <Trophy size={40} color="#f5a623" />
+                    </Box>
+
+                    <Box ml={2} flexGrow={1}>
+                      <Typography variant="h6" gutterBottom>
+                        {r.name}
+                      </Typography>
                       <Typography variant="body2" color="text.secondary">
                         Earned on {new Date(ur.earned_at).toLocaleDateString()}
                       </Typography>
                       {r.description && (
-                        <Typography variant="body2">{r.description}</Typography>
+                        <Typography variant="body2" sx={{ mt: 1 }}>
+                          {r.description}
+                        </Typography>
                       )}
                       <Chip
                         label={`Level ${r.level_required}`}

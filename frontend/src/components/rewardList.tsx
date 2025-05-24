@@ -19,8 +19,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Trophy, Edit2, Trash2 } from "lucide-react";
-import { showNotification } from "../../App.tsx";
-import { usePreferences } from "../PreferencesContext.tsx";
+import { showNotification } from "../App.tsx";
+import { usePreferences } from "./PreferencesContext.tsx";
 
 export interface Reward {
   _id: string;
@@ -169,18 +169,24 @@ const RewardList: React.FC = () => {
             style={{
               display: preference?.layout === "grid" ? "grid" : "flex",
               flexDirection:
-                preference?.layout === "list" ? "column" : undefined,
+                preference?.layout === "list" ||
+                preference?.layout === "compact"
+                  ? "column"
+                  : undefined,
               gap: preference?.layout === "compact" ? "8px" : "16px",
               gridTemplateColumns:
                 preference?.layout === "grid"
                   ? "repeat(auto-fill, minmax(300px, 1fr))"
                   : undefined,
+              width: "100%",
+              marginBottom: "30px",
             }}
           >
             {rewards.map((reward) => (
               <Card
                 key={reward._id}
                 sx={{
+                  width: preference?.layout === "compact" ? "100%" : "auto",
                   transition: "all 0.2s ease",
                   borderRadius: "8px",
                   boxShadow: "4px 4px 8px rgba(0, 0, 0, 0.15)",
@@ -199,10 +205,16 @@ const RewardList: React.FC = () => {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
+                    p:
+                      preference?.layout === "list"
+                        ? 4
+                        : preference?.layout === "compact"
+                          ? 2
+                          : 2,
                   }}
                 >
                   {preference?.layout === "grid" ? (
-                    // Nova postavitev za GRID
+                    // GRID
                     <Box
                       sx={{
                         display: "flex",
@@ -211,13 +223,11 @@ const RewardList: React.FC = () => {
                         width: "100%",
                       }}
                     >
-                      {/* Zgornji del: naslov + gumbi desno */}
                       <Box
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                          width: "100%",
                         }}
                       >
                         <Typography variant="h6" fontWeight="bold">
@@ -238,18 +248,30 @@ const RewardList: React.FC = () => {
                           </IconButton>
                         </Box>
                       </Box>
-
-                      {/* Srednji del: ikona levo, level in ostalo desno */}
                       <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                        sx={{
+                          display: "flex",
+                          gap: 2,
+                          alignItems: "center",
+                          minHeight: "60px",
+                        }}
                       >
-                        <Trophy size={40} color="#f5a623" />
+                        <Box
+                          sx={{
+                            minWidth: 40,
+                            minHeight: 40,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Trophy size={40} color="#f5a623" />
+                        </Box>
                         <Box
                           sx={{
                             display: "flex",
                             flexDirection: "column",
                             gap: 1,
-                            maxWidth: "215px",
                           }}
                         >
                           <Chip
@@ -258,14 +280,92 @@ const RewardList: React.FC = () => {
                             color="primary"
                             sx={{ width: "fit-content" }}
                           />
-                          <Typography variant="body2">
+                          <Typography variant="body1">
                             {reward.description ?? ""}
                           </Typography>
                         </Box>
                       </Box>
                     </Box>
+                  ) : preference?.layout === "compact" ? (
+                    // COMPACT layout
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: "2fr 1fr 3fr auto",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "100%",
+                      }}
+                    >
+                      {/* Ime */}
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        <Trophy size={25} color="#f5a623" />
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            fontWeight: "bold",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                          title={reward.name}
+                        >
+                          {reward.name}
+                        </Typography>
+                      </Box>
+
+                      {/* Condition */}
+                      <Box sx={{ justifySelf: "center" }}>
+                        <Chip
+                          label={reward.condition_required}
+                          variant="outlined"
+                          color="primary"
+                          sx={{ whiteSpace: "nowrap" }}
+                        />
+                      </Box>
+
+                      {/* Description */}
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          justifySelf: "center",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        title={reward.description}
+                      >
+                        {reward.description ?? ""}
+                      </Typography>
+
+                      {/* Ikone */}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 0.5,
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <IconButton
+                          size="small"
+                          onClick={() => handleOpen(reward)}
+                          color="primary"
+                        >
+                          <Edit2 size={16} />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => handleDelete(reward._id)}
+                          color="error"
+                        >
+                          <Trash2 size={16} />
+                        </IconButton>
+                      </Box>
+                    </Box>
                   ) : (
-                    // Privzeta postavitev za LIST
+                    // LIST
                     <Box
                       sx={{
                         display: "grid",
@@ -281,12 +381,14 @@ const RewardList: React.FC = () => {
                         <Trophy size={40} color="#f5a623" />
                         <Typography
                           variant="body1"
-                          sx={{ fontFamily: "inherit" }}
+                          sx={{
+                            fontFamily: "inherit",
+                            fontWeight: "bold",
+                          }}
                         >
                           {reward.name}
                         </Typography>
                       </Box>
-
                       <Box sx={{ justifySelf: "center" }}>
                         <Chip
                           label={reward.condition_required}
@@ -294,14 +396,15 @@ const RewardList: React.FC = () => {
                           color="primary"
                         />
                       </Box>
-
                       <Typography
-                        variant="body2"
-                        sx={{ justifySelf: "center", textAlign: "center" }}
+                        variant="body1"
+                        sx={{
+                          justifySelf: "center",
+                          textAlign: "center",
+                        }}
                       >
                         {reward.description ?? ""}
                       </Typography>
-
                       <Box
                         sx={{
                           display: "flex",
@@ -335,7 +438,8 @@ const RewardList: React.FC = () => {
         <DialogTitle sx={{ fontFamily: "inherit" }}>
           {editingId ? "Edit Achievement" : "Add Achievement"}
         </DialogTitle>
-        <DialogContent sx={{ display: "grid", gap: 2, pt: 2 }}>
+        <DialogContent sx={{ display: "grid", gap: 2 }}>
+          <Box height={1} />
           <FormControl fullWidth>
             <InputLabel sx={{ fontFamily: "inherit" }}>Type</InputLabel>
             <Select

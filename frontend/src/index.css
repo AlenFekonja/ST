@@ -15,8 +15,8 @@ code {
     monospace;
 }
 body.theme-dark .App {
-  background-color: #535353;
-  color: #f0f0f0;
+  background-color: #000000;
+  color: #ffffff;
 }
 
 body.theme-light .App {
@@ -25,52 +25,60 @@ body.theme-light .App {
 }
 
 body.theme-light .task-card {
-  background-color: #ffffff; /* svetla tema */
+  background-color: #ffffff;
   color: #000000;
 }
 
 body.theme-dark .task-card {
-  background-color: #444444; /* temna tema */
+  background-color: #191919;
   color: #f0f0f0;
 }
 
 body.theme-light .reward {
-  background-color: #ffffff; /* svetla tema */
+  background-color: #ffffff;
   color: #000000;
 }
 
 body.theme-dark .reward {
-  background-color: #393939; /* temna tema */
+  background-color: #191919;
   color: #f0f0f0;
 }
 
 body.theme-light .preference {
-  background-color: #ffffff; /* svetla tema */
+  background-color: #ffffff;
   color: #000000;
 }
 
 body.theme-dark .preference {
-  background-color: #393939; /* temna tema */
+  background-color: #191919;
   color: #f0f0f0;
 }
 
 body.theme-light .profile {
-  background-color: #ffffff; /* svetla tema */
+  background-color: #ffffff;
   color: #000000;
 }
 
 body.theme-dark .profile {
-  background-color: #393939; /* temna tema */
+  background-color: #191919;
   color: #f0f0f0;
 }
 
 body.theme-light .preferenceForm {
-  background-color: #ffffff; /* svetla tema */
+  background-color: #ffffff;
   color: #000000;
 }
 
 body.theme-dark .preferenceForm {
-  background-color: #2d2d2d; /* temna tema */
+  background-color: #191919;
+  color: #f0f0f0;
+}
+body.theme-dark .navbar {
+  background-color: #0a0a0a;
+  color: #f0f0f0;
+}
+body.theme-dark .footer {
+  background-color: #191919;
   color: #f0f0f0;
 }
 body[style*="sans-serif"] {
@@ -89,12 +97,6 @@ body.layout-grid .task-container {
   gap: 1rem;
 }
 
-body.layout-grid .reward-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-}
-
 body.layout-grid .preference-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -104,11 +106,4 @@ body.layout-list .task-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-body.layout-compact .task-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  font-size: 0.9rem;
 }

@@ -139,14 +139,41 @@ const TaskForm = () => {
       console.error("Error submitting task:", error);
     }
   };
+  useEffect(() => {
+    const params = getQueryParams(location.search);
+    const dateFromQuery = params.get("date");
+
+    if (dateFromQuery) {
+      setNewTask((prev) => ({ ...prev, event_date: dateFromQuery }));
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [location.search]);
 
   return (
-    <Box display="flex" justifyContent="center" padding="20px">
+    <Box display="flex" justifyContent="center" paddingTop={5} mb={3}>
       <Box maxWidth="800px" width="100%">
-        <Typography variant="h3" mb={4}>
-          Task
-        </Typography>
-        <Card>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={2}
+          sx={{ paddingTop: 1 }}
+        >
+          <Typography variant="h4">Task</Typography>
+          <Button variant="outlined" onClick={() => navigate(-1)}>
+            Back to list
+          </Button>
+        </Box>
+
+        <Card
+          sx={{
+            border: "1px solid #ccc",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+            borderRadius: 2,
+            paddingTop: 1,
+          }}
+        >
           <CardContent>
             <form onSubmit={handleSubmit}>
               <Box mb={2}>

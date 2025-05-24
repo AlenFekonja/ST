@@ -1,24 +1,56 @@
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import Navbar from "./components/navbar.tsx";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
 import { getAndParseJWT } from "./components/jwt.tsx";
+import { usePreferences } from "./components/PreferencesContext.tsx";
+const Footer = () => {
+  const { preference } = usePreferences();
 
-const Footer = () => (
-  <Box
-    component="footer"
-    sx={{
-      textAlign: "center",
-      padding: 2,
-      backgroundColor: "#333",
-      position: "relative",
-    }}
-  >
-    <Typography variant="body2" sx={{ color: "white" }}>
-      © 2025 HobbyHub. All rights reserved.
-    </Typography>
-  </Box>
-);
+  return (
+    <Box
+      component="footer"
+      className="footer"
+      sx={{
+        py: 6,
+        px: 4,
+        backgroundColor: "#222",
+        color: "white",
+        mt: "auto",
+      }}
+    >
+      <Box sx={{ maxWidth: 950, margin: "0 auto", textAlign: "left" }}>
+        <Typography variant="h6" align="left" sx={{ mb: 2 }}>
+          HobbyHub
+        </Typography>
+
+        {preference && (
+          <Stack
+            direction={{ xs: "column", sm: "row" }}
+            spacing={2}
+            justifyContent="flex-start"
+            alignItems="center"
+            sx={{ mb: 2 }}
+          >
+            <Typography variant="caption">
+              Theme: <strong>{preference.theme}</strong>
+            </Typography>
+            <Typography variant="caption">
+              Font: <strong>{preference.font}</strong>
+            </Typography>
+            <Typography variant="caption">
+              Layout: <strong>{preference.layout}</strong>
+            </Typography>
+          </Stack>
+        )}
+
+        <Typography variant="caption" sx={{ opacity: 0.7 }}>
+          © 2025 HobbyHub. All rights reserved.
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -45,14 +77,14 @@ const Layout = () => {
           flexGrow: 1,
           minHeight: "80vh",
           display: "flex",
-          justifyContent: "center", // centriraj vsebino horizontalno
+          justifyContent: "center",
           padding: { xs: 1, sm: 2 },
         }}
       >
         <Box
           sx={{
             width: "100%",
-            maxWidth: 1000, // omeji max širino vsebine
+            maxWidth: 1000,
             padding: 2,
             borderRadius: 1,
           }}

@@ -12,8 +12,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAndParseJWT } from "../jwt.tsx";
-import { showNotification } from "../../App.tsx";
+import { getAndParseJWT } from "./jwt.tsx";
+import { showNotification } from "../App.tsx";
 import {
   THEME_OPTIONS,
   FONT_OPTIONS,
@@ -22,7 +22,7 @@ import {
   FontOption,
   LayoutOption,
   usePreferences, // ✅ Dodano
-} from "../PreferencesContext.tsx";
+} from "./PreferencesContext.tsx";
 
 export interface Preference {
   _id?: string;
@@ -45,7 +45,7 @@ const PreferenceForm = () => {
 
   const [editing, setEditing] = useState(false);
   const navigate = useNavigate();
-  const { refreshPreference } = usePreferences(); // ✅ Dodano
+  const { refreshPreference } = usePreferences();
 
   useEffect(() => {
     const fetchPreference = async () => {

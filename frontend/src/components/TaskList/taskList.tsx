@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Typography, Box, IconButton, Tooltip } from "@mui/material";
+import {
+  Button,
+  Typography,
+  Box,
+  IconButton,
+  Tooltip,
+  Divider,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
   AccessTime as AccessTimeIcon,
@@ -10,6 +17,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { showNotification } from "../../App.tsx";
+import { usePreferences } from "../PreferencesContext.tsx";
 import "./taskList.css";
 
 export interface Task {
@@ -35,6 +43,9 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
   const [filter, setFilter] = useState<"all" | "started" | "completed">("all");
   const [loadingComplete, setLoadingComplete] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const { preference } = usePreferences();
+  const layout = preference?.layout || "list";
 
   const fetchTasks = async () => {
     try {
@@ -63,7 +74,6 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
         {},
         { withCredentials: true }
       );
-
       fetchTasks();
       showNotification(
         "Tasks",
@@ -161,120 +171,288 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
         </Button>
       </Box>
 
-      <div className="task-container">
+      <div className={`task-container ${layout}`}>
         {filteredTasks.map((task) => (
-          <div key={task._id} className="task-card">
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              mb={3}
-            >
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                className="task-title"
-                sx={{ fontFamily: "inherit" }}
+          <div key={task._id} className={`task-card ${layout}`}>
+            {layout === "compact" ? (
+              <Box
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                gap={2}
+                flexWrap="nowrap"
               >
-                {task.title}
-              </Typography>
-              {task.status === "completed" && (
-                <CheckCircleIcon color="success" titleAccess="Completed" />
-              )}
-            </Box>
-
-            <Box
-              display="flex"
-              gap={3}
-              flexWrap="wrap"
-              color="text.secondary"
-              mb={2}
-              sx={{ fontSize: "0.9rem" }}
-            >
-              <Box display="flex" alignItems="center" gap={0.4}>
-                <EventIcon fontSize="small" />
-                <Typography sx={{ fontFamily: "inherit" }}>
-                  {new Date(task.event_date).toLocaleDateString("sl-SI", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })}
+                <Typography
+                  fontWeight="bold"
+                  sx={{ fontFamily: "inherit", flex: "1 1 20%" }}
+                >
+                  {task.title}
                 </Typography>
+
+                <Box
+                  sx={{
+                    flex: "1 1 15%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography
+                    className="task-category"
+                    sx={{ fontFamily: "inherit" }}
+                  >
+                    {task.category}
+                  </Typography>
+                </Box>
+
+                <Box
+                  sx={{
+                    flex: "1 1 40%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "inherit",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {task.description || "No description"}
+                  </Typography>
+                </Box>
+
+                <Box
+                  display="flex"
+                  gap={1}
+                  flexShrink={0}
+                  sx={{ flex: "1 1 25%", justifyContent: "flex-end" }}
+                >
+                  <Tooltip title="Edit">
+                    <IconButton
+                      onClick={() => navigate(`/tasks/edit/${task._id}`)}
+                      disabled={task.status === "completed"}
+                      color="primary"
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Delete">
+                    <IconButton
+                      onClick={() => handleDelete(task._id)}
+                      color="error"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                  {task.status !== "completed" && (
+                    <Button
+                      onClick={() => handleComplete(task._id)}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      sx={{ fontWeight: "bold", fontFamily: "inherit" }}
+                      disabled={loadingComplete === task._id}
+                    >
+                      {loadingComplete === task._id
+                        ? "Completing..."
+                        : "Complete"}
+                    </Button>
+                  )}
+                </Box>
               </Box>
-              <Box display="flex" alignItems="center" gap={0.4}>
-                <AccessTimeIcon fontSize="small" />
-                <Typography sx={{ fontFamily: "inherit" }}>
-                  {task.start_time} - {task.end_time}
+            ) : (
+              <>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb={2}
+                >
+                  <Typography
+                    variant="h6"
+                    fontWeight="bold"
+                    className="task-title"
+                    sx={{ fontFamily: "inherit" }}
+                  >
+                    {task.title}
+                  </Typography>
+                  <Box display="flex" alignItems="center" gap={1}>
+                    {task.status !== "completed" && layout === "list" && (
+                      <Button
+                        onClick={() => handleComplete(task._id)}
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        sx={{ fontWeight: "bold", fontFamily: "inherit" }}
+                        disabled={loadingComplete === task._id}
+                      >
+                        {loadingComplete === task._id
+                          ? "Completing..."
+                          : "Complete"}
+                      </Button>
+                    )}
+                    {task.status === "completed" && (
+                      <CheckCircleIcon
+                        color="success"
+                        titleAccess="Completed"
+                      />
+                    )}
+                  </Box>
+                </Box>
+
+                {/* Basic info */}
+                <Box
+                  display="flex"
+                  gap={3}
+                  flexWrap="wrap"
+                  color="text.secondary"
+                  mb={2}
+                  sx={{ fontSize: "0.9rem" }}
+                >
+                  <Box display="flex" alignItems="center" gap={0.4}>
+                    <EventIcon fontSize="small" />
+                    <Typography sx={{ fontFamily: "inherit" }}>
+                      {new Date(task.event_date).toLocaleDateString("sl-SI", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      })}
+                    </Typography>
+                  </Box>
+                  <Box display="flex" alignItems="center" gap={0.4}>
+                    <AccessTimeIcon fontSize="small" />
+                    <Typography sx={{ fontFamily: "inherit" }}>
+                      {task.start_time} - {task.end_time}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    className="task-category"
+                    sx={{ fontFamily: "inherit" }}
+                  >
+                    {task.category}
+                  </Typography>
+                </Box>
+
+                {/* Description */}
+                <Typography
+                  variant="body2"
+                  className="task-description"
+                  sx={{ fontFamily: "inherit" }}
+                >
+                  {task.description || "No description"}
                 </Typography>
-              </Box>
-              <Typography
-                sx={{ fontFamily: "inherit" }}
-                className="task-category"
-              >
-                {task.category}{" "}
-              </Typography>
-            </Box>
 
-            <Typography
-              variant="body2"
-              className="task-description"
-              sx={{ fontFamily: "inherit" }}
-            >
-              {task.description || "No description"}
-            </Typography>
+                {/* Notes + Reminder + Buttons (list layout) */}
+                {layout === "list" && (
+                  <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    mt={2}
+                    color="text.secondary"
+                    flexWrap="wrap"
+                  >
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          fontFamily: "inherit",
+                          display: "block",
+                          mb: 0.5,
+                        }}
+                      >
+                        Reminder:{" "}
+                        {new Date(task.event_date).toLocaleDateString("sl-SI", {
+                          year: "numeric",
+                          month: "2-digit",
+                          day: "2-digit",
+                        }) || "-"}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ fontFamily: "inherit", display: "block" }}
+                      >
+                        Notes: {task.notes || "-"}
+                      </Typography>
+                    </Box>
 
-            <Box
-              display="flex"
-              flexDirection="column"
-              gap={0.5}
-              mt={3}
-              mb={1}
-              color="text.secondary"
-            >
-              <Typography variant="caption" sx={{ fontFamily: "inherit" }}>
-                Reminder:{" "}
-                {new Date(task.event_date).toLocaleDateString("sl-SI", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                }) || "-"}
-              </Typography>
-              <Typography variant="caption" sx={{ fontFamily: "inherit" }}>
-                Notes: {task.notes || "-"}
-              </Typography>
-            </Box>
+                    <Box display="flex" gap={1} mt={{ xs: 1, sm: 0 }}>
+                      <Tooltip title="Edit">
+                        <IconButton
+                          onClick={() => navigate(`/tasks/edit/${task._id}`)}
+                          disabled={task.status === "completed"}
+                          color="primary"
+                        >
+                          <EditIcon fontSize="medium" />
+                        </IconButton>
+                      </Tooltip>
+                      <Tooltip title="Delete">
+                        <IconButton
+                          onClick={() => handleDelete(task._id)}
+                          color="error"
+                        >
+                          <DeleteIcon fontSize="medium" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </Box>
+                )}
 
-            <Box display="flex" gap={1} mt={1}>
-              <Tooltip title="Edit">
-                <IconButton
-                  onClick={() => navigate(`/tasks/edit/${task._id}`)}
-                  disabled={task.status === "completed"}
-                  color="primary"
-                >
-                  <EditIcon fontSize="medium" />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Delete">
-                <IconButton
-                  onClick={() => handleDelete(task._id)}
-                  color="error"
-                >
-                  <DeleteIcon fontSize="medium" />
-                </IconButton>
-              </Tooltip>
-              {task.status !== "completed" && (
-                <Button
-                  onClick={() => handleComplete(task._id)}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  sx={{ fontWeight: "bold", fontFamily: "inherit" }}
-                  disabled={loadingComplete === task._id}
-                >
-                  {loadingComplete === task._id ? "Completing..." : "Complete"}
-                </Button>
-              )}
-            </Box>
+                {/* Divider + Buttons (grid layout) */}
+                {layout === "grid" && (
+                  <>
+                    <Divider sx={{ my: 2 }} />
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      gap={1}
+                      flexWrap="wrap"
+                    >
+                      {task.status !== "completed" && (
+                        <Button
+                          onClick={() => handleComplete(task._id)}
+                          variant="outlined"
+                          color="primary"
+                          size="small"
+                          sx={{
+                            fontWeight: "bold",
+                            fontFamily: "inherit",
+                          }}
+                          disabled={loadingComplete === task._id}
+                        >
+                          {loadingComplete === task._id
+                            ? "Completing..."
+                            : "Complete"}
+                        </Button>
+                      )}
+
+                      <Box display="flex" gap={1} ml="auto">
+                        <Tooltip title="Edit">
+                          <IconButton
+                            onClick={() => navigate(`/tasks/edit/${task._id}`)}
+                            disabled={task.status === "completed"}
+                            color="primary"
+                          >
+                            <EditIcon fontSize="medium" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton
+                            onClick={() => handleDelete(task._id)}
+                            color="error"
+                          >
+                            <DeleteIcon fontSize="medium" />
+                          </IconButton>
+                        </Tooltip>
+                      </Box>
+                    </Box>
+                  </>
+                )}
+              </>
+            )}
           </div>
         ))}
       </div>

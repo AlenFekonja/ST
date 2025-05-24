@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import UserList from "./components/userList.tsx";
-import RewardList from "./components/RewardList/rewardList.tsx";
-import PreferenceList from "./components/PreferenceList/preferenceList.tsx";
+import RewardList from "./components/rewardList.tsx";
+import PreferenceList from "./components/preferenceList.tsx";
 import UserRewardList from "./components/userRewardList.tsx";
 import AuthPage from "./components/auth.tsx";
 import Layout from "./layout.tsx";
@@ -10,10 +10,10 @@ import { ServiceWorker } from "./serviceWorker.tsx";
 import Shortcuts from "./components/shortcuts.tsx";
 import Register from "./components/register.tsx";
 import TaskForm from "./components/taskForm.tsx";
-import PreferenceForm from "./components/PreferenceForm/preferenceForm.tsx";
+import PreferenceForm from "./components/preferenceForm.tsx";
 import Profile from "./components/profile.tsx";
-import RewardsList from "./components/RewardList/rewardList.tsx";
-import TaskManager from "./components/TaskManager/taskManager.tsx";
+import RewardsList from "./components/rewardList.tsx";
+import TaskManager from "./components/taskManager.tsx";
 import { PreferencesProvider } from "./components/PreferencesContext.tsx";
 export function showNotification(title: string, body: string) {
   if (Notification.permission === "granted") {

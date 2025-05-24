@@ -22,7 +22,6 @@
 }
 
 .task-title {
-  font-size: 1.1rem !important;
   user-select: text;
 }
 
@@ -32,11 +31,10 @@
   border-radius: 12px;
   font-weight: 500;
   user-select: text;
-  font-size: 0.9rem;
 }
 
-.theme-dark .task-category { 
-  color:black
+.theme-dark .task-category {
+  color: black;
 }
 
 .task-description {

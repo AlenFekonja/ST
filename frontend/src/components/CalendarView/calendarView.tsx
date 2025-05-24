@@ -117,20 +117,21 @@ const CalendarView = () => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       const newDate = new Date(value);
-      newDate.setDate(newDate.getDate() + 1); // dodaj en dan
-      const isoDate = newDate.toISOString().split("T")[0]; // npr. "2025-05-13"
+      newDate.setDate(newDate.getDate() + 1); 
+      const isoDate = newDate.toISOString().split("T")[0]; 
       navigate(`/tasks/add?date=${isoDate}`);
     };
 
     return (
       <div
         style={{
-          position: "relative", // naj bo vedno relativno za znotraj "absolute"
+          position: "relative", 
           width: "100%",
           height: "100%",
         }}
       >
         <button
+        className="plus"
           onClick={handleClick}
           style={{
             position: "absolute",

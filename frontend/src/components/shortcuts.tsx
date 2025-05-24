@@ -1,14 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import React from "react";
 
 const Shortcuts = () => {
   return (
     <div
       className="task"
-      style={{ display: "flex", justifyContent: "center", padding: "20px" }}
+      style={{ display: "flex", justifyContent: "center", padding: "30px" }}
     >
-      <div style={{ maxWidth: "800px", width: "100%" }}>
-        <Typography variant="h3" mb={4}>
+      <div style={{ maxWidth: "900px", width: "100%" }}>
+        <Typography variant="h4" mb={3}>
           Shortcuts list
         </Typography>
         <Box>
