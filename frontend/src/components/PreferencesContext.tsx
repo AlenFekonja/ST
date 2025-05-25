@@ -27,16 +27,26 @@ export interface Preference {
   active: boolean;
 }
 
+// Default fallback preference
+const DEFAULT_PREFERENCE: Preference = {
+  theme: "light",
+  font: "sans-serif",
+  layout: "list",
+  active: true,
+};
+
 interface PreferencesContextType {
-  preference: Preference | null;
+  preference: Preference;
   refreshPreference: () => void;
   updatePreference: (updated: Partial<Preference>) => Promise<void>;
+  setPreference: (pref: Preference | null) => void;
 }
 
 const PreferencesContext = createContext<PreferencesContextType>({
-  preference: null,
+  preference: DEFAULT_PREFERENCE,
   refreshPreference: () => {},
   updatePreference: async () => {},
+  setPreference: () => {},
 });
 
 export const usePreferences = () => useContext(PreferencesContext);
@@ -57,10 +67,21 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
       const response = await axios.get(
         `http://localhost:5000/preferences/${userId}`
       );
-      const active = response.data.find((p: Preference) => p.active === true);
-      setPreference(active || response.data[0] || null);
+      // poišči aktivno preference
+      const activePref = response.data.find(
+        (p: Preference) => p.active === true
+      );
+
+      // Če ni aktivne preference ali ni nobene preference, uporabi default
+      if (!activePref) {
+        setPreference(DEFAULT_PREFERENCE);
+      } else {
+        setPreference(activePref);
+      }
     } catch (error) {
       console.error("Error fetching active preference", error);
+      // V primeru errorja uporabimo default preference
+      setPreference(DEFAULT_PREFERENCE);
     } finally {
       setLoading(false);
     }
@@ -84,40 +105,30 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    if (!preference) return;
+    const effectivePref = preference || DEFAULT_PREFERENCE;
 
-    // Body class for theme
+    // Nastavi body class glede na preference
     document.body.classList.remove("theme-light", "theme-dark");
-    if (preference.theme === "light") {
-      document.body.classList.add("theme-light");
-    } else if (preference.theme === "dark") {
-      document.body.classList.add("theme-dark");
-    }
+    document.body.classList.add(`theme-${effectivePref.theme}`);
 
-    // Body font-family fallback
-    document.body.style.fontFamily = preference.font || "sans-serif";
+    document.body.style.fontFamily = effectivePref.font;
 
-    // Layout classes
     document.body.classList.remove(
       "layout-grid",
       "layout-list",
       "layout-compact"
     );
-    if (preference.layout) {
-      document.body.classList.add(`layout-${preference.layout}`);
-    }
+    document.body.classList.add(`layout-${effectivePref.layout}`);
   }, [preference]);
 
-  // ---- MUI Theme creation ----
   const muiTheme = React.useMemo(() => {
-    if (!preference) return createTheme();
-
+    const effectivePref = preference || DEFAULT_PREFERENCE;
     return createTheme({
       palette: {
-        mode: preference.theme === "dark" ? "dark" : "light",
+        mode: effectivePref.theme === "dark" ? "dark" : "light",
       },
       typography: {
-        fontFamily: preference.font,
+        fontFamily: effectivePref.font,
       },
     });
   }, [preference]);
@@ -127,9 +138,10 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
   return (
     <PreferencesContext.Provider
       value={{
-        preference,
+        preference: preference || DEFAULT_PREFERENCE,
         refreshPreference: fetchActivePreference,
         updatePreference,
+        setPreference,
       }}
     >
       <ThemeProvider theme={muiTheme}>

@@ -21,7 +21,7 @@ import {
   ThemeOption,
   FontOption,
   LayoutOption,
-  usePreferences, // ✅ Dodano
+  usePreferences,
 } from "./PreferencesContext.tsx";
 
 export interface Preference {
@@ -110,14 +110,7 @@ const PreferenceForm = () => {
         );
         showNotification("Preferences", "Preferences created");
         refreshPreference();
-        setPreference({
-          user_id: "",
-          theme: "light",
-          font: "sans-serif",
-          layout: "grid",
-          active: true,
-        });
-        setEditing(false);
+        navigate("/preferences");
       }
     } catch (error) {
       showNotification("Preferences Error", "Submit failed: " + error);

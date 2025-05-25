@@ -36,7 +36,7 @@ const PreferencesList = () => {
   const [preferences, setPreferences] = useState<Preference[]>([]);
   const { preference: activePreference } = usePreferences(); // pridobimo layout
   const layout = activePreference?.layout ?? "list"; // fallback če ni preference
-
+  const { refreshPreference } = usePreferences();
   const fetchPreferences = async () => {
     try {
       const response = await axios.get(
@@ -57,6 +57,7 @@ const PreferencesList = () => {
       await axios.delete(`http://localhost:5000/preferences/${id}`);
       fetchPreferences();
       showNotification("Preferences", "Preference was deleted");
+      await refreshPreference();
     } catch (error) {
       showNotification("Preferences Error", "Preference was not deleted");
     }
