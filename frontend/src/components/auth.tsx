@@ -97,9 +97,10 @@ const AuthComponent = () => {
               try {
                 const response = await axios.post(
                   "http://localhost:5000/users/login",
-                  { email, password }
-                );
-                document.cookie = `token=${response.data.accessToken}; path=/; secure; samesite=None`;
+                  { email, password }, {
+          withCredentials: true,
+        });
+                document.cookie = `token=${response.data.accessToken}; path=/; samesite=lax; max-age=${24 * 60 * 60}`;
                 navigate("/tasks");
                 showNotification("Login", "You are now logged in");
               } catch (error) {

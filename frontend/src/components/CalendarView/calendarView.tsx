@@ -8,6 +8,7 @@ import { Task } from "../TaskList/taskList";
 import { Typography, Box, Dialog, Button } from "@mui/material";
 import "./calendarView.css";
 import { useNavigate } from "react-router-dom";
+import {getCookie} from "../jwt";
 
 const locales = {
   "en-US": enUS,
@@ -43,7 +44,9 @@ const CalendarView = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get<Task[]>("http://localhost:5000/tasks");
+      const response = await axios.get<Task[]>("http://localhost:5000/tasks", {
+          withCredentials: true,
+        });
 
       const calendarEvents: CalendarEvent[] = response.data.map((task) => {
         const eventDate = new Date(task.event_date); // ISO datum

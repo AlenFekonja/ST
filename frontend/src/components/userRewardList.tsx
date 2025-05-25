@@ -31,8 +31,9 @@ const UserRewardList = () => {
   const fetchUserRewards = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/userRewards/${getAndParseJWT()?.payload.id}`
-      );
+        `http://localhost:5000/userRewards/${getAndParseJWT()?.payload.id}`, {
+          withCredentials: true,
+        });
       setUserRewards(response.data);
     } catch (error) {
       showNotification("My Rewards Error","Error fetching user rewards");

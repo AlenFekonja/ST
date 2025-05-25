@@ -51,8 +51,9 @@ const PreferenceForm = () => {
     const fetchPreference = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/preferences/single/${id}`
-        );
+          `http://localhost:5000/preferences/single/${id}`, {
+          withCredentials: true,
+        });
         const data: Preference = response.data;
         setPreference({
           user_id: data.user_id || "",
@@ -75,8 +76,9 @@ const PreferenceForm = () => {
   const deactivateOtherPreferences = async (userId: string) => {
     try {
       await axios.put(
-        `http://localhost:5000/preferences/deactivate-others/${userId}`
-      );
+        `http://localhost:5000/preferences/deactivate-others/${userId}`, {
+          withCredentials: true,
+        });
     } catch (error) {
       console.error("Failed to deactivate other preferences:", error);
     }
@@ -98,16 +100,18 @@ const PreferenceForm = () => {
       if (editing && id) {
         await axios.put(
           `http://localhost:5000/preferences/${id}`,
-          updatedPreference
-        );
+          updatedPreference, {
+          withCredentials: true,
+        });
         showNotification("Preferences", "Preferences updated");
         refreshPreference();
         navigate("/preferences");
       } else {
         await axios.post(
           "http://localhost:5000/preferences",
-          updatedPreference
-        );
+          updatedPreference, {
+          withCredentials: true,
+        });
         showNotification("Preferences", "Preferences created");
         refreshPreference();
         navigate("/preferences");

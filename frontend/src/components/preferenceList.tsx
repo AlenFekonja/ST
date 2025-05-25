@@ -40,8 +40,9 @@ const PreferencesList = () => {
   const fetchPreferences = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/preferences/${getAndParseJWT()?.payload.id}`
-      );
+        `http://localhost:5000/preferences/${getAndParseJWT()?.payload.id}`, {
+          withCredentials: true,
+        });
       setPreferences(response.data);
     } catch (error) {
       showNotification(
@@ -54,7 +55,9 @@ const PreferencesList = () => {
   const handleDelete = async (id?: string) => {
     if (!id) return;
     try {
-      await axios.delete(`http://localhost:5000/preferences/${id}`);
+      await axios.delete(`http://localhost:5000/preferences/${id}`, {
+          withCredentials: true,
+        });
       fetchPreferences();
       showNotification("Preferences", "Preference was deleted");
       await refreshPreference();

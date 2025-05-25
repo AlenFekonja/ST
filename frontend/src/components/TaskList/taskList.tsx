@@ -49,7 +49,9 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks");
+      const response = await axios.get("http://localhost:5000/tasks", {
+          withCredentials: true,
+        });
       setTasks(response.data);
     } catch (error) {
       showNotification("Tasks Error", `Couldn't fetch tasks: ${error}`);
@@ -58,7 +60,9 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${id}`);
+      await axios.delete(`http://localhost:5000/tasks/${id}`, {
+          withCredentials: true,
+        });
       fetchTasks();
       showNotification("Tasks", "Task was deleted");
     } catch (error) {
