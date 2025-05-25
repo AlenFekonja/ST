@@ -42,7 +42,6 @@ function App() {
                 element={<PreferenceForm />}
               />
               <Route path="/rewards" element={<RewardList />} />
-              <Route path="/rewardsList" element={<RewardsList />} />
               <Route path="/users" element={<UserList />} />
               <Route path="/tasks/add" element={<TaskForm />} />
               <Route path="/tasks/edit/:id" element={<TaskForm />} />

@@ -84,16 +84,6 @@ const Navbar = () => {
           </li>
           <li>
             <Link
-              href="/rewardsList"
-              underline="none"
-              color="inherit"
-              sx={{ fontSize: "1.1em", "&:hover": { color: "#1e90ff" } }}
-            >
-              Rewards
-            </Link>
-          </li>
-          <li>
-            <Link
               href="/preferences"
               underline="none"
               color="inherit"
@@ -123,6 +113,9 @@ const Navbar = () => {
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >
+              {user?.email && (
+                <MenuItem disabled>Logged in as: {user.email}</MenuItem>
+              )}
               <MenuItem onClick={handleClose}>
                 <VoiceCommand />
               </MenuItem>
@@ -134,10 +127,6 @@ const Navbar = () => {
               >
                 Shortcuts
               </MenuItem>
-              {user?.email && (
-                <MenuItem disabled>Logged in as: {user.email}</MenuItem>
-              )}
-              <MenuItem onClick={useLogout}>Logout</MenuItem>
               {user?.admin && (
                 <>
                   <MenuItem
@@ -158,6 +147,7 @@ const Navbar = () => {
                   </MenuItem>
                 </>
               )}
+             <MenuItem onClick={useLogout}>Logout</MenuItem>
             </Menu>
           </li>
         </Stack>
