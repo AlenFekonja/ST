@@ -65,8 +65,9 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/preferences/${userId}`
-      );
+        `http://localhost:5000/preferences/${userId}`, {
+          withCredentials: true,
+        });
       // poišči aktivno preference
       const activePref = response.data.find(
         (p: Preference) => p.active === true
@@ -92,8 +93,9 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     try {
       await axios.put(
         `http://localhost:5000/preferences/${preference._id}`,
-        updated
-      );
+        updated, {
+          withCredentials: true,
+        });
       await fetchActivePreference();
     } catch (error) {
       console.error("Error updating preference", error);

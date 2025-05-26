@@ -75,7 +75,9 @@ const TaskForm = () => {
 
     const fetchTask = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/tasks/${id}`);
+        const response = await axios.get(`http://localhost:5000/tasks/${id}`, {
+          withCredentials: true,
+        });
         const task = response.data;
         const userId =
           typeof task.user_id === "object" && task.user_id !== null
@@ -112,12 +114,15 @@ const TaskForm = () => {
       if (editingTask) {
         await axios.put(
           `http://localhost:5000/tasks/${editingTask._id}`,
-          newTask
-        );
+          newTask, {
+          withCredentials: true,
+        });
         showNotification("Tasks", "Task was edited");
         navigate("/tasks");
       } else {
-        await axios.post("http://localhost:5000/tasks", newTask);
+        await axios.post("http://localhost:5000/tasks", newTask, {
+          withCredentials: true,
+        });
         showNotification("Tasks", "Task was added");
       }
 

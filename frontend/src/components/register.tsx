@@ -31,7 +31,9 @@ const Register = () => {
         username,
         email,
         password,
-      });
+      }, {
+          withCredentials: true,
+        });
       showNotification("Registration", "New user registered");
       navigate("/");
     } catch (error) {

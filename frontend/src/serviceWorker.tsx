@@ -5,7 +5,7 @@ export function ServiceWorker() {
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         if (!navigator.serviceWorker.controller) {
-          navigator.serviceWorker.register('/frontend/sw.js', { scope: '/frontend/' })
+          navigator.serviceWorker.register('sw.js', { scope: '/' })
             .then(reg => {
               console.log('Service Worker registered with scope:', reg.scope);
             })

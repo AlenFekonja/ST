@@ -46,7 +46,9 @@ const UserList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/users");
+      const response = await axios.get("http://localhost:5000/users", {
+          withCredentials: true,
+        });
       setUsers(response.data);
     } catch (error) {
       showNotification("Users Error", "Error fetching users");
@@ -59,11 +61,14 @@ const UserList = () => {
       if (editingUser) {
         await axios.put(
           `http://localhost:5000/users/${editingUser._id}`,
-          newUser
-        );
+          newUser, {
+          withCredentials: true,
+        });
         showNotification("Users", "User was updated");
       } else {
-        await axios.post("http://localhost:5000/users", newUser);
+        await axios.post("http://localhost:5000/users", newUser, {
+          withCredentials: true,
+        });
         showNotification("Users", "User was added");
       }
       setEditingUser(null);
@@ -85,7 +90,9 @@ const UserList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/users/${id}`);
+      await axios.delete(`http://localhost:5000/users/${id}`, {
+          withCredentials: true,
+        });
       showNotification("Users", "User was deleted");
       fetchUsers();
     } catch (error: any) {
