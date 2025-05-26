@@ -149,14 +149,23 @@ const RewardList: React.FC = () => {
               flexWrap: "wrap",
             }}
           >
-            <Typography variant="h4" sx={{ fontFamily: "inherit" }}>
+            <Typography
+              variant="h4"
+              sx={{
+                fontFamily: "inherit",
+                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+              }}
+            >
               All Achievement Definitions
             </Typography>
 
             <Button
               variant="contained"
               onClick={() => handleOpen()}
-              sx={{ fontFamily: "inherit" }}
+              sx={{
+                fontFamily: "inherit",
+                mt: { xs: 2, sm: 0 },
+              }}
             >
               Add reward
             </Button>
@@ -164,22 +173,25 @@ const RewardList: React.FC = () => {
 
           {rewards.length === 0 && <Typography>No rewards found.</Typography>}
 
-          <div
+          <Box
             className="reward-container"
-            style={{
+            sx={{
               display: preference?.layout === "grid" ? "grid" : "flex",
               flexDirection:
                 preference?.layout === "list" ||
                 preference?.layout === "compact"
                   ? "column"
                   : undefined,
-              gap: preference?.layout === "compact" ? "8px" : "16px",
-              gridTemplateColumns:
-                preference?.layout === "grid"
-                  ? "repeat(auto-fill, minmax(300px, 1fr))"
-                  : undefined,
+              gap: preference?.layout === "compact" ? 1 : 2,
+              gridTemplateColumns: {
+                xs: "1fr",
+                sm:
+                  preference?.layout === "grid"
+                    ? "repeat(auto-fill, minmax(280px, 1fr))"
+                    : undefined,
+              },
               width: "100%",
-              marginBottom: "30px",
+              mb: 4,
             }}
           >
             {rewards.map((reward) => (
@@ -205,12 +217,10 @@ const RewardList: React.FC = () => {
                     display: "flex",
                     flexDirection: "column",
                     height: "100%",
-                    p:
-                      preference?.layout === "list"
-                        ? 4
-                        : preference?.layout === "compact"
-                          ? 2
-                          : 2,
+                    p: {
+                      xs: 2,
+                      sm: preference?.layout === "list" ? 4 : 2,
+                    },
                   }}
                 >
                   {preference?.layout === "grid" ? (
@@ -287,17 +297,19 @@ const RewardList: React.FC = () => {
                       </Box>
                     </Box>
                   ) : preference?.layout === "compact" ? (
-                    // COMPACT layout
+                    // COMPACT
                     <Box
                       sx={{
                         display: "grid",
-                        gridTemplateColumns: "2fr 1fr 3fr auto",
+                        gridTemplateColumns: {
+                          xs: "1fr", // stack on mobile
+                          sm: "2fr 1fr 3fr auto", // normal layout on sm+
+                        },
                         alignItems: "center",
                         gap: 2,
                         width: "100%",
                       }}
                     >
-                      {/* Ime */}
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
@@ -316,8 +328,14 @@ const RewardList: React.FC = () => {
                         </Typography>
                       </Box>
 
-                      {/* Condition */}
-                      <Box sx={{ justifySelf: "center" }}>
+                      <Box
+                        sx={{
+                          justifySelf: {
+                            xs: "start", // levo poravnano na malih zaslonih
+                            sm: "center",
+                          },
+                        }}
+                      >
                         <Chip
                           label={reward.condition_required}
                           variant="outlined"
@@ -325,22 +343,24 @@ const RewardList: React.FC = () => {
                           sx={{ whiteSpace: "nowrap" }}
                         />
                       </Box>
-
-                      {/* Description */}
                       <Typography
                         variant="body1"
                         sx={{
-                          justifySelf: "center",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
+                          whiteSpace: "normal",
+                          overflowWrap: "break-word",
+                          textAlign: {
+                            xs: "left", // na malih zaslonih levo
+                            sm: "center", // večji lahko center
+                          },
+                          justifySelf: {
+                            xs: "start", // levo na malih
+                            sm: "center",
+                          },
                         }}
-                        title={reward.description}
                       >
                         {reward.description ?? ""}
                       </Typography>
 
-                      {/* Ikone */}
                       <Box
                         sx={{
                           display: "flex",
@@ -369,7 +389,10 @@ const RewardList: React.FC = () => {
                     <Box
                       sx={{
                         display: "grid",
-                        gridTemplateColumns: "25% 20% 30% auto",
+                        gridTemplateColumns: {
+                          xs: "1fr", // stack on mobile
+                          sm: "25% 20% 30% auto", // normal layout on sm+
+                        },
                         alignItems: "center",
                         gap: 2,
                         width: "100%",
@@ -389,22 +412,41 @@ const RewardList: React.FC = () => {
                           {reward.name}
                         </Typography>
                       </Box>
-                      <Box sx={{ justifySelf: "center" }}>
+
+                      <Box
+                        sx={{
+                          justifySelf: {
+                            xs: "start", // levo poravnano na malih zaslonih
+                            sm: "center",
+                          },
+                        }}
+                      >
                         <Chip
                           label={reward.condition_required}
                           variant="outlined"
                           color="primary"
+                          sx={{ whiteSpace: "nowrap" }}
                         />
                       </Box>
+
                       <Typography
                         variant="body1"
                         sx={{
-                          justifySelf: "center",
-                          textAlign: "center",
+                          whiteSpace: "normal",
+                          overflowWrap: "break-word",
+                          textAlign: {
+                            xs: "left", // na malih zaslonih levo
+                            sm: "center", // večji lahko center
+                          },
+                          justifySelf: {
+                            xs: "start", // levo na malih
+                            sm: "center",
+                          },
                         }}
                       >
                         {reward.description ?? ""}
                       </Typography>
+
                       <Box
                         sx={{
                           display: "flex",
@@ -430,7 +472,7 @@ const RewardList: React.FC = () => {
                 </CardContent>
               </Card>
             ))}
-          </div>
+          </Box>
         </Box>
       </Box>
 

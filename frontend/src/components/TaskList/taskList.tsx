@@ -134,13 +134,30 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
         </Box>
       )}
 
-      <Box display="flex" justifyContent="space-between" mb={3}>
-        <Box display="flex" gap={1}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", sm: "row" }} // <-- sprememba!
+        justifyContent="space-between"
+        alignItems={{ xs: "stretch", sm: "center" }}
+        mb={3}
+        gap={1} // Da dodaš prostor med vrsticami na mobilnih
+      >
+        <Box
+          display="flex"
+          flexDirection={{ xs: "column", sm: "row" }}
+          alignItems="flex-start"
+          justifyContent="flex-start"
+          gap={1}
+          width="100%"
+        >
           <Button
             variant={filter === "all" ? "contained" : "outlined"}
             onClick={() => setFilter("all")}
             size="small"
-            sx={{ fontFamily: "inherit" }}
+            sx={{
+              fontFamily: "inherit",
+              width: { xs: "100%", sm: "auto" },
+            }}
           >
             All
           </Button>
@@ -148,7 +165,10 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
             variant={filter === "started" ? "contained" : "outlined"}
             onClick={() => setFilter("started")}
             size="small"
-            sx={{ fontFamily: "inherit" }}
+            sx={{
+              fontFamily: "inherit",
+              width: { xs: "100%", sm: "auto" },
+            }}
           >
             Started
           </Button>
@@ -156,16 +176,25 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
             variant={filter === "completed" ? "contained" : "outlined"}
             onClick={() => setFilter("completed")}
             size="small"
-            sx={{ fontFamily: "inherit" }}
+            sx={{
+              fontFamily: "inherit",
+              width: { xs: "100%", sm: "auto" },
+            }}
           >
             Completed
           </Button>
         </Box>
+
         <Button
           variant="contained"
           onClick={() => navigate("/tasks/add")}
           size="small"
-          sx={{ fontFamily: "inherit" }}
+          sx={{
+            fontFamily: "inherit",
+            alignSelf: { xs: "stretch", sm: "auto" }, // xs: full width, sm+: normalno
+            whiteSpace: "nowrap", // prepreči prelom besede
+            px: { xs: 0, sm: 2 }, // malo več paddinga na desni/levo za večje zaslone
+          }}
         >
           Add Task
         </Button>
@@ -177,10 +206,10 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
             {layout === "compact" ? (
               <Box
                 display="flex"
+                flexDirection={{ xs: "column", sm: "row" }} // <- to je ključno
                 justifyContent="space-between"
-                alignItems="center"
+                alignItems={{ xs: "flex-start", sm: "center" }}
                 gap={2}
-                flexWrap="nowrap"
               >
                 <Typography
                   fontWeight="bold"
@@ -211,12 +240,14 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
                     justifyContent: "center",
                   }}
                 >
+                  {/* Description */}
                   <Typography
+                    className="task-description"
                     sx={{
                       fontFamily: "inherit",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
+                      wordWrap: "break-word",
+                      overflowWrap: "break-word",
+                      whiteSpace: "normal",
                     }}
                   >
                     {task.description || "No description"}
@@ -227,7 +258,12 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
                   display="flex"
                   gap={1}
                   flexShrink={0}
-                  sx={{ flex: "1 1 25%", justifyContent: "flex-end" }}
+                  sx={{
+                    flex: { sm: "1 1 25%" },
+                    justifyContent: { xs: "flex-end", sm: "flex-end" },
+                    width: { xs: "100%", sm: "auto" },
+                    mt: { xs: 1, sm: 0 },
+                  }}
                 >
                   <Tooltip title="Edit">
                     <IconButton
@@ -339,7 +375,12 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
                 <Typography
                   variant="body2"
                   className="task-description"
-                  sx={{ fontFamily: "inherit" }}
+                  sx={{
+                    fontFamily: "inherit",
+                    wordWrap: "break-word",
+                    overflowWrap: "break-word",
+                    whiteSpace: "normal",
+                  }}
                 >
                   {task.description || "No description"}
                 </Typography>

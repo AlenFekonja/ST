@@ -217,14 +217,23 @@ const PreferencesList = () => {
             flexWrap: "wrap",
           }}
         >
-          <Typography variant="h4" sx={{ fontFamily: "inherit" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontFamily: "inherit",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
+            }}
+          >
             Preferences
           </Typography>
 
           <Button
             variant="contained"
             onClick={() => navigate("/preferences/add")}
-            sx={{ fontFamily: "inherit" }}
+            sx={{
+              fontFamily: "inherit",
+              mt: { xs: 2, sm: 0 },
+            }}
           >
             Add preference
           </Button>

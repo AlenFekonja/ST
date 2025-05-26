@@ -135,14 +135,23 @@ const PreferenceForm = () => {
             flexWrap: "wrap",
           }}
         >
-          <Typography variant="h4" sx={{ fontFamily: "inherit" }}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontFamily: "inherit",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, 
+            }}
+          >
             {editing ? "Edit Preferences" : "Create Preferences"}
           </Typography>
 
           <Button
             variant="outlined"
             onClick={() => navigate("/preferences")}
-            sx={{ fontFamily: "inherit" }}
+            sx={{
+              fontFamily: "inherit",
+              mt: { xs: 2, sm: 0 },
+            }}
           >
             Back to list
           </Button>

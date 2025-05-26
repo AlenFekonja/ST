@@ -117,21 +117,21 @@ const CalendarView = () => {
     const handleClick = (e: React.MouseEvent) => {
       e.stopPropagation();
       const newDate = new Date(value);
-      newDate.setDate(newDate.getDate() + 1); 
-      const isoDate = newDate.toISOString().split("T")[0]; 
+      newDate.setDate(newDate.getDate() + 1);
+      const isoDate = newDate.toISOString().split("T")[0];
       navigate(`/tasks/add?date=${isoDate}`);
     };
 
     return (
       <div
         style={{
-          position: "relative", 
+          position: "relative",
           width: "100%",
           height: "100%",
         }}
       >
         <button
-        className="plus"
+          className="plus"
           onClick={handleClick}
           style={{
             position: "absolute",
@@ -156,46 +156,59 @@ const CalendarView = () => {
   return (
     <Box sx={{ width: "100%" }}>
       <div className="view">
-        <Calendar
-          localizer={localizer}
-          events={events}
-          startAccessor="start"
-          endAccessor="end"
-          date={currentDate}
-          onNavigate={(date) => setCurrentDate(date)}
-          view={currentView}
-          onView={(view) => setCurrentView(view)}
-          defaultView="month"
-          views={["month", "week", "day", "agenda"]}
-          popup
-          eventPropGetter={eventStyleGetter}
-          onSelectEvent={(event: CalendarEvent) => {
-            setSelectedEvent(event);
-            setIsModalOpen(true);
-          }}
-          components={{
-            ...(currentView === "month" && {
-              dateCellWrapper: CustomDateCellWrapper,
-            }),
-          }}
-        />
+        <div className="calendar-wrapper">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            date={currentDate}
+            onNavigate={(date) => setCurrentDate(date)}
+            view={currentView}
+            onView={(view) => setCurrentView(view)}
+            defaultView="month"
+            views={["month", "week", "day", "agenda"]}
+            popup
+            eventPropGetter={eventStyleGetter}
+            onSelectEvent={(event: CalendarEvent) => {
+              setSelectedEvent(event);
+              setIsModalOpen(true);
+            }}
+            components={{
+              ...(currentView === "month" && {
+                dateCellWrapper: CustomDateCellWrapper,
+              }),
+            }}
+          />
+        </div>
       </div>
       {selectedEvent && (
-        <Dialog open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Dialog
+          open={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          fullWidth
+          maxWidth="sm" // ali "xs", "md" - po potrebi
+        >
           <Box
             sx={{
-              padding: 3,
-              minWidth: 350,
+              p: { xs: 2, sm: 3 },
+              width: "100%",
+              boxSizing: "border-box",
               borderRadius: 2,
-              boxShadow: 24,
               backgroundColor: "background.paper",
               color: "text.primary",
               fontFamily: "Roboto, sans-serif",
+              wordBreak: "break-word",
             }}
           >
-            <Typography variant="h6" gutterBottom>
+            <Typography
+              variant="h6"
+              gutterBottom
+              sx={{ fontSize: { xs: "1.1rem", sm: "1.25rem" } }}
+            >
               {selectedEvent.resource.title}
             </Typography>
+
             <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>ID:</strong> {selectedEvent.resource._id}
             </Typography>
@@ -222,8 +235,18 @@ const CalendarView = () => {
             <Typography variant="body2" sx={{ mb: 1 }}>
               <strong>Status:</strong> {selectedEvent.resource.status}
             </Typography>
-            <Box mt={2} display="flex" justifyContent="flex-end">
-              <Button variant="contained" onClick={() => setIsModalOpen(false)}>
+
+            <Box
+              mt={2}
+              display="flex"
+              justifyContent="flex-end"
+              flexWrap="wrap"
+            >
+              <Button
+                variant="contained"
+                onClick={() => setIsModalOpen(false)}
+                sx={{ minWidth: 100 }}
+              >
                 Close
               </Button>
             </Box>

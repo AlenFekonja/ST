@@ -1,13 +1,35 @@
 /* Default (light theme) */
-body {
+html,
+body,
+#root {
+  height: 100%;
   margin: 0;
+  padding: 0;
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: black;
-  height: 100%;
+}
+
+.navbar,
+.footer {
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (max-width: 600px) {
+  .navbar,
+  .footer {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 code {

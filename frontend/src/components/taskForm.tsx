@@ -160,7 +160,15 @@ const TaskForm = () => {
           mb={2}
           sx={{ paddingTop: 1 }}
         >
-          <Typography variant="h4">Task</Typography>
+          <Typography
+            variant="h4"
+            sx={{
+              fontFamily: "inherit",
+              fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, 
+            }}
+          >
+            Task
+          </Typography>
           <Button variant="outlined" onClick={() => navigate(-1)}>
             Back to list
           </Button>

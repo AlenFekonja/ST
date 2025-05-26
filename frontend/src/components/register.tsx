@@ -52,7 +52,7 @@ const Register = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: theme === "dark" ? "#1e1e1e" : "#f0f0f0", // sivo ozadje
+        backgroundColor: theme === "dark" ? "#1e1e1e" : "#f0f0f0", 
       }}
     >
       <Card

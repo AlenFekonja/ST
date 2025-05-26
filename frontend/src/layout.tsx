@@ -4,6 +4,7 @@ import Navbar from "./components/navbar.tsx";
 import { Box, Typography, Stack } from "@mui/material";
 import { getAndParseJWT } from "./components/jwt.tsx";
 import { usePreferences } from "./components/PreferencesContext.tsx";
+
 const Footer = () => {
   const { preference } = usePreferences();
 
@@ -17,10 +18,22 @@ const Footer = () => {
         backgroundColor: "#222",
         color: "white",
         mt: "auto",
+        width: "100%",
       }}
     >
-      <Box sx={{ maxWidth: 950, margin: "0 auto", textAlign: "left" }}>
-        <Typography variant="h6" align="left" sx={{ mb: 2 }}>
+      <Box
+        sx={{
+          maxWidth: 950,
+          margin: "0 auto",
+          textAlign: { xs: "left", sm: "left" },
+          alignItems: { xs: "flex-start", sm: "flex-start" },
+        }}
+      >
+        <Typography
+          variant="h6"
+          alignItems={{ xs: "center", sm: "left" }}
+          sx={{ mb: 2 }}
+        >
           HobbyHub
         </Typography>
 
@@ -28,8 +41,8 @@ const Footer = () => {
           <Stack
             direction={{ xs: "column", sm: "row" }}
             spacing={2}
-            justifyContent="flex-start"
-            alignItems="center"
+            justifyContent={{ xs: "flex-start", sm: "flex-start" }}
+            alignItems={{ xs: "flex-start", sm: "flex-start" }}
             sx={{ mb: 2 }}
           >
             <Typography variant="caption">
@@ -44,7 +57,11 @@ const Footer = () => {
           </Stack>
         )}
 
-        <Typography variant="caption" sx={{ opacity: 0.7 }}>
+        <Typography
+          variant="caption"
+          sx={{ opacity: 0.7 }}
+          alignItems={{ xs: "left", sm: "left" }}
+        >
           © 2025 HobbyHub. All rights reserved.
         </Typography>
       </Box>
@@ -69,23 +86,26 @@ const Layout = () => {
         flexDirection: "column",
         minHeight: "100vh",
         padding: 0,
+        width: "100%",
       }}
     >
       <Navbar />
       <Box
+        component="main"
         sx={{
           flexGrow: 1,
           minHeight: "80vh",
           display: "flex",
           justifyContent: "center",
           padding: { xs: 1, sm: 2 },
+          width: "100%",
         }}
       >
         <Box
           sx={{
             width: "100%",
-            maxWidth: 1000,
-            padding: 2,
+            maxWidth: { xs: "100%", sm: 1000 },
+            padding: { xs: 1, sm: 2 },
             borderRadius: 1,
           }}
         >

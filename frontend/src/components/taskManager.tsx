@@ -16,7 +16,13 @@ const TaskManager = () => {
         alignItems="center"
         mb={3}
       >
-        <Typography variant="h4" sx={{ fontFamily: "inherit" }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: "inherit",
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, 
+          }}
+        >
           Task Manager
         </Typography>
 

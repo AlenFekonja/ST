@@ -109,31 +109,47 @@ const Profile = () => {
       <Card
         className="profile"
         sx={{
-          maxWidth: 450,
           width: "100%",
-          py: 4,
-          px: 3,
+          maxWidth: { xs: "100%", sm: 500, md: 600 },
+          py: { xs: 3, sm: 4 },
+          px: { xs: 2, sm: 3 },
           boxShadow: 5,
           borderRadius: 4,
           backgroundColor: "#fff",
+          mt: { xs: 2, sm: 4 },
         }}
       >
         <Box display="flex" flexDirection="column" alignItems="center" mb={3}>
           <Avatar
             sx={{
               bgcolor: "#1e90ff",
-              width: 80,
-              height: 80,
-              fontSize: 32,
+              width: { xs: 64, sm: 80 },
+              height: { xs: 64, sm: 80 },
+              fontSize: { xs: 28, sm: 32 },
               mb: 1,
             }}
           >
             {profile.email.charAt(0).toUpperCase()}
           </Avatar>
-          <Typography variant="h5" fontWeight="bold">
+
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            textAlign="center"
+            sx={{
+              fontSize: { xs: "1rem", sm: "1.25rem" },
+              wordBreak: "break-all",
+            }}
+          >
             {profile.email}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            textAlign="center"
+            sx={{ fontSize: { xs: "0.85rem", sm: "1rem" } }}
+          >
             {profile.admin ? "Administrator" : "Standard User"}
           </Typography>
         </Box>
@@ -144,14 +160,29 @@ const Profile = () => {
           <ProfileItem label="User ID" value={profile._id} />
           <ProfileItem label="Level" value={profile.level} />
           <Box>
-            <Typography color="text.secondary">EXP</Typography>
-            <Typography fontWeight="medium" mb={0.5}>
+            <Typography
+              color="text.secondary"
+              sx={{ fontSize: { xs: "0.85rem", sm: "1rem" } }}
+            >
+              EXP
+            </Typography>
+            <Typography
+              fontWeight="medium"
+              mb={0.5}
+              sx={{
+                fontSize: { xs: "0.85rem", sm: "1rem" },
+                wordBreak: "break-word",
+              }}
+            >
               {currentExp} / {LEVEL_THRESHOLD} ({Math.round(progressPercent)}%)
             </Typography>
             <LinearProgress
               variant="determinate"
               value={progressPercent}
-              sx={{ height: 10, borderRadius: 5 }}
+              sx={{
+                height: { xs: 8, sm: 10 },
+                borderRadius: 5,
+              }}
             />
           </Box>
         </Stack>
@@ -168,7 +199,13 @@ const Profile = () => {
       </Card>
 
       <Box sx={{ width: "100%", maxWidth: 900, mt: 6 }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: "inherit",
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" }, // prilagaj po želji
+          }}
+        >
           My Achievements
         </Typography>
 
@@ -194,7 +231,7 @@ const Profile = () => {
                   <Card
                     sx={{
                       display: "flex",
-                      alignItems: "center", 
+                      alignItems: "center",
                       p: 2,
                       borderRadius: 2,
                       boxShadow: 2,
@@ -251,9 +288,24 @@ const Profile = () => {
 };
 
 const ProfileItem = ({ label, value }: { label: string; value: any }) => (
-  <Box display="flex" justifyContent="space-between">
-    <Typography color="text.secondary">{label}</Typography>
-    <Typography fontWeight="medium">{value}</Typography>
+  <Box display="flex" justifyContent="space-between" flexWrap="wrap">
+    <Typography
+      color="text.secondary"
+      sx={{ fontSize: { xs: "0.98rem", sm: "1rem" } }}
+    >
+      {label}
+    </Typography>
+    <Typography
+      fontWeight="medium"
+      sx={{
+        fontSize: { xs: "0.85rem", sm: "1rem" },
+        wordBreak: "break-all",
+        maxWidth: "100%",
+        textAlign: "right",
+      }}
+    >
+      {value}
+    </Typography>
   </Box>
 );
 

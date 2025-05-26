@@ -1,8 +1,13 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Card, CardContent, Typography, Box } from "@mui/material";
+import {
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  useMediaQuery,
+} from "@mui/material";
 import { showNotification } from "../App.tsx";
 import { getAndParseJWT } from "./jwt.tsx";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +35,7 @@ const UserList = () => {
   });
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   useEffect(() => {
     const userPayload = getAndParseJWT()?.payload;
@@ -49,7 +55,6 @@ const UserList = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       if (editingUser) {
         await axios.put(
@@ -118,28 +123,55 @@ const UserList = () => {
   }, []);
 
   return (
-    <Box display="flex" justifyContent="center" padding="30px">
+    <Box display="flex" justifyContent="center" px={2} py={4}>
       <Box maxWidth="800px" width="100%">
-        <Typography variant="h4" mb={3}>
+        <Typography
+          variant="h4"
+          mb={3}
+          sx={{ fontSize: { xs: "1.5rem", sm: "2rem" } }}
+        >
           Users List
         </Typography>
 
         {users.map((user) => (
-          <Card key={user._id} sx={{ mb: 2 }}>
+          <Card key={user._id} sx={{ mb: 2, p: { xs: 1, sm: 2 } }}>
             <CardContent>
-              <Typography>Id: {user._id}</Typography>
-              <Typography>Username: {user.username}</Typography>
-              <Typography>Email: {user.email}</Typography>
-              <Typography>Points: {user.points}</Typography>
-              <Typography>Level: {user.level}</Typography>
-              <Typography>Admin: {user.admin ? "Yes" : "No"}</Typography>
+              <Typography
+                sx={{
+                  fontSize: { xs: "0.85rem", sm: "1rem" },
+                  wordBreak: "break-word",
+                }}
+              >
+                <strong>ID:</strong> {user._id}
+              </Typography>
+              <Typography sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                <strong>Username:</strong> {user.username}
+              </Typography>
+              <Typography sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                <strong>Email:</strong> {user.email}
+              </Typography>
+              <Typography sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                <strong>Points:</strong> {user.points}
+              </Typography>
+              <Typography sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                <strong>Level:</strong> {user.level}
+              </Typography>
+              <Typography sx={{ fontSize: { xs: "0.9rem", sm: "1rem" } }}>
+                <strong>Admin:</strong> {user.admin ? "Yes" : "No"}
+              </Typography>
             </CardContent>
 
-            <Box display="flex" gap={2} p={2}>
+            <Box
+              display="flex"
+              gap={2}
+              flexDirection={{ xs: "column", sm: "row" }}
+              p={2}
+            >
               <Button
                 onClick={() => handleDelete(user._id)}
                 variant="outlined"
                 color="error"
+                fullWidth={isSmallScreen}
               >
                 Delete
               </Button>
@@ -147,6 +179,7 @@ const UserList = () => {
                 onClick={() => handleAdminUpdate(user._id)}
                 variant="outlined"
                 color={user.admin ? "error" : "primary"}
+                fullWidth={isSmallScreen}
               >
                 {user.admin ? "Remove admin status" : "Give admin status"}
               </Button>
