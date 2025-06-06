@@ -8,7 +8,7 @@ import { Task } from "../TaskList/taskList";
 import { Typography, Box, Dialog, Button } from "@mui/material";
 import "./calendarView.css";
 import { useNavigate } from "react-router-dom";
-import {getCookie} from "../jwt";
+import {getAndParseJWT} from "../jwt.tsx";
 
 const locales = {
   "en-US": enUS,
@@ -44,7 +44,7 @@ const CalendarView = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get<Task[]>("http://localhost:5000/tasks", {
+      const response = await axios.get<Task[]>(`http://localhost:5000/tasks/user/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
 

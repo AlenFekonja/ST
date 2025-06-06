@@ -19,6 +19,7 @@ import {
 import { showNotification } from "../../App.tsx";
 import { usePreferences } from "../PreferencesContext.tsx";
 import "./taskList.css";
+import { getAndParseJWT } from "../jwt.tsx";
 
 export interface Task {
   _id: string;
@@ -49,7 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/tasks", {
+      const response = await axios.get(`http://localhost:5000/tasks/user/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
       setTasks(response.data);
