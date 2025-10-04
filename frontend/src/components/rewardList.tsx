@@ -19,7 +19,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Trophy, Edit2, Trash2 } from "lucide-react";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { usePreferences } from "./PreferencesContext.tsx";
 
 export interface Reward {
@@ -45,7 +45,7 @@ const RewardList: React.FC = () => {
 
   const fetchRewards = async () => {
     try {
-      const res = await axios.get<Reward[]>("http://localhost:5000/rewards", {
+      const res = await axios.get<Reward[]>(`${BACKEND_URL}/rewards`, {
         withCredentials: true,
       });
       setRewards(res.data);
@@ -100,12 +100,12 @@ const RewardList: React.FC = () => {
     try {
       const payload = buildPayload();
       if (editingId) {
-        await axios.put(`http://localhost:5000/rewards/${editingId}`, payload, {
+        await axios.put(`${BACKEND_URL}/rewards/${editingId}`, payload, {
           withCredentials: true,
         });
         showNotification("Rewards", "Updated successfully");
       } else {
-        await axios.post("http://localhost:5000/rewards", payload, {
+        await axios.post(`${BACKEND_URL}/rewards`, payload, {
           withCredentials: true,
         });
         showNotification("Rewards", "Created successfully");
@@ -119,7 +119,7 @@ const RewardList: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/rewards/${id}`, {
+      await axios.delete(`${BACKEND_URL}/rewards/${id}`, {
         withCredentials: true,
       });
       showNotification("Rewards", "Deleted");

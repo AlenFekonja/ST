@@ -9,6 +9,7 @@ import { Typography, Box, Dialog, Button } from "@mui/material";
 import "./calendarView.css";
 import { useNavigate } from "react-router-dom";
 import {getAndParseJWT} from "../jwt.tsx";
+import { BACKEND_URL } from "../../App.tsx";
 
 const locales = {
   "en-US": enUS,
@@ -44,7 +45,7 @@ const CalendarView = () => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get<Task[]>(`http://localhost:5000/tasks/user/${getAndParseJWT()?.payload.id}`, {
+      const response = await axios.get<Task[]>(`${BACKEND_URL}/tasks/user/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
 

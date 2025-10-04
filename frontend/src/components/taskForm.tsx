@@ -13,7 +13,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { getAndParseJWT } from "./jwt.tsx";
 import { useLocation } from "react-router-dom";
 
@@ -75,7 +75,7 @@ const TaskForm = () => {
 
     const fetchTask = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/tasks/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/tasks/${id}`, {
           withCredentials: true,
         });
         const task = response.data;
@@ -113,14 +113,14 @@ const TaskForm = () => {
     try {
       if (editingTask) {
         await axios.put(
-          `http://localhost:5000/tasks/${editingTask._id}`,
+          `${BACKEND_URL}/tasks/${editingTask._id}`,
           newTask, {
           withCredentials: true,
         });
         showNotification("Tasks", "Task was edited");
         navigate("/tasks");
       } else {
-        await axios.post("http://localhost:5000/tasks", newTask, {
+        await axios.post(`${BACKEND_URL}/tasks`, newTask, {
           withCredentials: true,
         });
         showNotification("Tasks", "Task was added");

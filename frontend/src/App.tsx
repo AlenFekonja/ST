@@ -12,7 +12,6 @@ import Register from "./components/register.tsx";
 import TaskForm from "./components/taskForm.tsx";
 import PreferenceForm from "./components/preferenceForm.tsx";
 import Profile from "./components/profile.tsx";
-import RewardsList from "./components/rewardList.tsx";
 import TaskManager from "./components/taskManager.tsx";
 import { PreferencesProvider } from "./components/PreferencesContext.tsx";
 export function showNotification(title: string, body: string) {
@@ -22,6 +21,7 @@ export function showNotification(title: string, body: string) {
     console.log("Notification permission not granted");
   }
 }
+export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   ServiceWorker();

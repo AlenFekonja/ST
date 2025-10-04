@@ -16,7 +16,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
-import { showNotification } from "../../App.tsx";
+import { BACKEND_URL, showNotification } from "../../App.tsx";
 import { usePreferences } from "../PreferencesContext.tsx";
 import "./taskList.css";
 import { getAndParseJWT } from "../jwt.tsx";
@@ -50,7 +50,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
   const fetchTasks = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/tasks/user/${getAndParseJWT()?.payload.id}`, {
+      const response = await axios.get(`${BACKEND_URL}/tasks/user/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
       setTasks(response.data);
@@ -61,7 +61,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/tasks/${id}`, {
+      await axios.delete(`${BACKEND_URL}/tasks/${id}`, {
           withCredentials: true,
         });
       fetchTasks();
@@ -75,7 +75,7 @@ const TaskList: React.FC<TaskListProps> = ({ embedded = false }) => {
     setLoadingComplete(taskId);
     try {
       const completeRes = await axios.put(
-        `http://localhost:5000/tasks/${taskId}/complete`,
+        `${BACKEND_URL}/tasks/${taskId}/complete`,
         {},
         { withCredentials: true }
       );

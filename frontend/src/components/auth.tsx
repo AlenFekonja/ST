@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { usePreferences } from "./PreferencesContext.tsx";
 
 const AuthComponent = () => {
@@ -96,7 +96,7 @@ const AuthComponent = () => {
             onClick={async () => {
               try {
                 const response = await axios.post(
-                  "http://localhost:5000/users/login",
+                  `${BACKEND_URL}/users/login`,
                   { email, password }, {
           withCredentials: true,
         });

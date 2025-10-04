@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAndParseJWT } from "./jwt.tsx";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import {
   THEME_OPTIONS,
   FONT_OPTIONS,
@@ -51,7 +51,7 @@ const PreferenceForm = () => {
     const fetchPreference = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/preferences/single/${id}`, {
+          `${BACKEND_URL}/preferences/single/${id}`, {
           withCredentials: true,
         });
         const data: Preference = response.data;
@@ -76,7 +76,7 @@ const PreferenceForm = () => {
   const deactivateOtherPreferences = async (userId: string) => {
     try {
       await axios.put(
-        `http://localhost:5000/preferences/deactivate-others/${userId}`, {
+        `${BACKEND_URL}/preferences/deactivate-others/${userId}`, {
           withCredentials: true,
         });
     } catch (error) {
@@ -99,7 +99,7 @@ const PreferenceForm = () => {
 
       if (editing && id) {
         await axios.put(
-          `http://localhost:5000/preferences/${id}`,
+          `${BACKEND_URL}/preferences/${id}`,
           updatedPreference, {
           withCredentials: true,
         });
@@ -108,7 +108,7 @@ const PreferenceForm = () => {
         navigate("/preferences");
       } else {
         await axios.post(
-          "http://localhost:5000/preferences",
+          `${BACKEND_URL}/preferences`,
           updatedPreference, {
           withCredentials: true,
         });

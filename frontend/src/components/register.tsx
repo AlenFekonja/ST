@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { usePreferences } from "./PreferencesContext.tsx";
 
 const Register = () => {
@@ -27,7 +27,7 @@ const Register = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/users", {
+      const response = await axios.post(`${BACKEND_URL}/users`, {
         username,
         email,
         password,

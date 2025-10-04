@@ -19,7 +19,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { getAndParseJWT } from "./jwt.tsx";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { usePreferences } from "./PreferencesContext.tsx"; // Pomembno za layout
 
 export interface Preference {
@@ -40,7 +40,7 @@ const PreferencesList = () => {
   const fetchPreferences = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/preferences/${getAndParseJWT()?.payload.id}`, {
+        `${BACKEND_URL}/preferences/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
       setPreferences(response.data);
@@ -55,7 +55,7 @@ const PreferencesList = () => {
   const handleDelete = async (id?: string) => {
     if (!id) return;
     try {
-      await axios.delete(`http://localhost:5000/preferences/${id}`, {
+      await axios.delete(`${BACKEND_URL}/preferences/${id}`, {
           withCredentials: true,
         });
       fetchPreferences();

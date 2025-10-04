@@ -7,7 +7,7 @@ import {
   Box,
 } from "@mui/material";
 import { getAndParseJWT } from "./jwt.tsx";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 
 interface Reward {
   _id: string;
@@ -31,7 +31,7 @@ const UserRewardList = () => {
   const fetchUserRewards = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/userRewards/${getAndParseJWT()?.payload.id}`, {
+        `${BACKEND_URL}/userRewards/${getAndParseJWT()?.payload.id}`, {
           withCredentials: true,
         });
       setUserRewards(response.data);

@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { Trophy } from "lucide-react";
 import { getAndParseJWT } from "./jwt.tsx";
+import { BACKEND_URL } from "../App.tsx";
 
 interface UserProfile {
   _id: string;
@@ -53,7 +54,7 @@ const Profile = () => {
       return;
     }
     axios
-      .get<UserProfile>(`http://localhost:5000/users/${userId}`, {
+      .get<UserProfile>(`${BACKEND_URL}/users/${userId}`, {
         withCredentials: true,
       })
       .then((res) => setProfile(res.data))
@@ -67,7 +68,7 @@ const Profile = () => {
       return;
     }
     axios
-      .get<UserReward[]>(`http://localhost:5000/userRewards/${userId}`, {
+      .get<UserReward[]>(`${BACKEND_URL}/userRewards/${userId}`, {
         withCredentials: true,
       })
       .then((res) => setAchievements(res.data))

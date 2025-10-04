@@ -8,7 +8,7 @@ import {
   Box,
   useMediaQuery,
 } from "@mui/material";
-import { showNotification } from "../App.tsx";
+import { BACKEND_URL, showNotification } from "../App.tsx";
 import { getAndParseJWT } from "./jwt.tsx";
 import { useNavigate } from "react-router-dom";
 
@@ -46,7 +46,7 @@ const UserList = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/users", {
+      const response = await axios.get(`${BACKEND_URL}/users`, {
           withCredentials: true,
         });
       setUsers(response.data);
@@ -60,13 +60,13 @@ const UserList = () => {
     try {
       if (editingUser) {
         await axios.put(
-          `http://localhost:5000/users/${editingUser._id}`,
+          `${BACKEND_URL}/users/${editingUser._id}`,
           newUser, {
           withCredentials: true,
         });
         showNotification("Users", "User was updated");
       } else {
-        await axios.post("http://localhost:5000/users", newUser, {
+        await axios.post(`${BACKEND_URL}/users`, newUser, {
           withCredentials: true,
         });
         showNotification("Users", "User was added");
@@ -90,7 +90,7 @@ const UserList = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:5000/users/${id}`, {
+      await axios.delete(`${BACKEND_URL}/users/${id}`, {
           withCredentials: true,
         });
       showNotification("Users", "User was deleted");
@@ -106,7 +106,7 @@ const UserList = () => {
   const handleAdminUpdate = async (id: string) => {
     try {
       await axios.put(
-        `http://localhost:5000/users/admin/${id}`,
+        `${BACKEND_URL}/users/admin/${id}`,
         {},
         { withCredentials: true }
       );

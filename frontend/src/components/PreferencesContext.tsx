@@ -9,6 +9,7 @@ import axios from "axios";
 import { getAndParseJWT } from "./jwt.tsx";
 
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
+import { BACKEND_URL } from "../App.tsx";
 
 export const THEME_OPTIONS = ["light", "dark"] as const;
 export const FONT_OPTIONS = ["sans-serif", "serif", "monospace"] as const;
@@ -65,7 +66,7 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/preferences/${userId}`, {
+        `${BACKEND_URL}/preferences/${userId}`, {
           withCredentials: true,
         });
       // poišči aktivno preference
@@ -92,7 +93,7 @@ export const PreferencesProvider = ({ children }: { children: ReactNode }) => {
     if (!preference || !preference._id) return;
     try {
       await axios.put(
-        `http://localhost:5000/preferences/${preference._id}`,
+        `${BACKEND_URL}/preferences/${preference._id}`,
         updated, {
           withCredentials: true,
         });
